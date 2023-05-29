@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Login for users</title>
+	<link rel="icon" href="logo.jpg" type="image/jpg">
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    body {font-family: Arial, Helvetica, sans-serif;}
+form {border: 3px solid #f1f1f1;}
+
+input[type=email] {
+  width: 100%;
+  padding: 12px 20px;
+  margin: 8px 0;
+  display: inline-block;
+  border: 1px solid #ccc;
+  box-sizing: border-box;
+}
+
+#next{
+  background-color: #04AA6D;
+  color: white;
+  padding: 14px 20px;
+  border: none;
+  cursor: pointer;
+  width: 120px;
+}
+
+#next:hover {
+  opacity: 0.8;
+}
+
+
+.imgcontainer {
+  text-align: center;
+  margin: 24px 0 12px 0;
+  color: white;
+}
+
+.container {
+  padding: 16px;
+}
+
+span.psw {
+  float: right;
+  padding-top: 16px;
+}
+
+/* Change styles for span and cancel button on extra small screens */
+@media screen and (max-width: 300px) {
+  span.psw {
+     display: block;
+     float: none;
+  }
+  .cancelbtn {
+     width: 100%;
+  }
+
+ #next{
+	width: 80px;
+  }
+}
+
+  </style>
+</head>
+<body>
+
+<h2>Reset Password</h2>
+
+<form action="verify.php" method="post">
+  <div class="container">
+    <label for="email"><b>Please Enter your email</b></label>
+    <input type="email" placeholder="Enter Email" name="email" required>
+    <input id="next" type="submit" name="emailConfirmation" value="next">
+  </div>
+ 
+</form>
+
+</body>
+</html>

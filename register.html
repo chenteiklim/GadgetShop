@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="icon" href="logo.jpg" type="image/jpg">
+    <style>
+     body {font-family: Arial, Helvetica, sans-serif;
+}
+
+input[type=text], input[type=password] ,input[type=email] {
+  width: 100%;
+  padding: 12px 20px;
+  margin: 8px 0;
+  display: inline-block;
+  border: 1px solid #ccc;
+  box-sizing: border-box;
+}
+
+#register {
+  background-color: #04AA6D;
+  color: white;
+  padding: 14px 20px;
+  margin: 8px 0;
+  border: none;
+  cursor: pointer;
+  width: 120px;
+}
+
+#register:hover {
+  opacity: 0.8;
+}
+
+
+.imgcontainer {
+  text-align: center;
+  margin: 24px 0 12px 0;
+  color: white;
+}
+
+.container {
+  padding: 16px;
+}
+
+span.psw {
+  float: right;
+  padding-top: 16px;
+}
+
+.nameMessage, .emailMessage, .passwordMessage, .confirmMessage {
+  background-color: #dff0d8;
+  color: #3c763d;
+  padding: 10px;
+  margin-bottom: 20px;
+  font-size: 13px;
+}
+
+/* Change styles for span and cancel button on extra small screens */
+@media screen and (max-width: 300px) {
+  span.psw {
+     display: block;
+     float: none;
+  }
+  .cancelbtn {
+     width: 100%;
+  }
+
+  #register{
+  width: 80px;
+  }
+}
+    </style>
+</head>
+<body>
+
+  <h2>Register Form for users</h2>
+  
+  <form action="register.php" method="post">
+  
+    <div class="container">
+      <label for="username"><b>Username</b></label>
+      <input type="text" placeholder="Enter Username" name="username" required>
+      <div id="nameContainer"></div>
+
+      <label for="email"><b>Email</b></label>
+      <input type="email" placeholder="Enter Email" name="email" required>
+      <div id="emailContainer"></div>
+
+      <label for="password"><b>Password</b></label>
+      <input type="password" placeholder="Enter Password" name="password" required>
+      <div id="passwordContainer"></div>
+
+      <label for="confirm_password"><b>Confirm Password</b></label>
+      <input type="password" placeholder="Enter Password Again" name="confirm_password" required>
+      <div id="confirmContainer"></div>
+      <input id="register" type="submit" name="submit" value="Submit">
+
+    </div>
+    
+  
+  </form>
+  
+    </body>
+    <script src="register.js"></script>
+</html>
