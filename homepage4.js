@@ -1,4 +1,3 @@
-dsadsadsad
 const BASE_URL="http://localhost/Project/EnterpriseProject/api.php"
 
 window.onload=()=>{
@@ -23,6 +22,7 @@ async function displayProductData2(){
     
 
     const container=document.querySelector('#container')
+  
     console.log(name)
         let newProduct2 = `
             <div id="product-${ID}" class="ID"><!--Use for design product container-->
@@ -48,8 +48,31 @@ async function displayProductData2(){
             }
             newProduct2+=`<div id="status-${ID}" class="status">${status} sold</div>` 
             newProduct2 +=`</div>`     
-            newProduct2+= `<button id="btn-${ID}" onclick="save(${ID})"  class ="btn" type="button">View</button>`
+            newProduct2+= `<button id="btn-${ID}" onclick="view(${ID})"  class ="btn" type="button">View</button>`
             container.innerHTML+=newProduct2
         }
 }
-
+  
+function view(ID){
+    console.log(ID)
+    if (ID === 0) {
+        window.location.href = 'keyboard.html';
+      } else if (ID === 1) {
+        window.location.href = 'mouse.html';
+      }
+      else if (ID === 2) {
+        window.location.href = 'mousepad.html';
+      }   
+      else if (ID === 3) {
+        window.location.href = 'monitor.html';
+      }   
+      else if (ID === 4) {
+        window.location.href = 'earbud.html';
+      }   
+      else if (ID === 5) {
+        window.location.href = 'headset.html';
+      }   
+      else if (ID === 6) {
+        window.location.href = 'casing.html';
+      }   
+}

@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -9,14 +10,47 @@
 
 <link rel="stylesheet" href="homepage.css">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"></link>
+<style>
+     .keyboard{
+        width: 300px;
+        height: 300px;
+    }
+
+    .name{
+        margin-left: 30px;
+        font-size: 30px;
+    }
+
+    .price{
+        font-size: 20px;
+    }    
+    
+    #container{
+        display: flex;
+    }
+   
+    #addCartBtn {
+    background-color: black;
+    color: white;
+    cursor: pointer;
+    margin-top: 20px;
+    margin-left: 50px;
+    padding-left: 10px;
+    padding-right: 10px;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    font-size: 14px;
+    }
+
+    #addCartBtn:active {
+    transform: scale(0.9);
+    background: radial-gradient( circle farthest-corner at 10% 20%,  rgba(255,94,247,1) 17.8%, rgba(2,245,255,1) 100.2% );
+    }
+
+</style>
 </head>
 <body>
-  <div id="successMessage1"></div>
-      <div id="successMessage3"></div>
-    
-  <h1>Homepage</h1>
-  <p>Please choose from the variety of Electronic devices</p> 
-</div>
+
 
 
 <div id="navContainer"> 
@@ -28,16 +62,13 @@
   <button class="button">headset</button>
   <button class="button">Casing</button>
   <button id="logOut" class="button">Log-out</button>
-
 </div>
 
-<div id="container">
-</div>
-<script src="register.js"></script>
+<script src="keyboard.js"></script>
 <script src="log-out.js"></script>
-<script src="homepage4.js"></script>
+<div id="container"></div>
 
-  
+
 </body>
 </html>
 
