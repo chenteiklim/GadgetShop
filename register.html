@@ -49,13 +49,7 @@ span.psw {
   padding-top: 16px;
 }
 
-.nameMessage, .emailMessage, .passwordMessage, .confirmMessage {
-  background-color: #dff0d8;
-  color: #3c763d;
-  padding: 10px;
-  margin-bottom: 20px;
-  font-size: 13px;
-}
+
 
 /* Change styles for span and cancel button on extra small screens */
 @media screen and (max-width: 300px) {
@@ -84,9 +78,15 @@ span.psw {
       <input type="text" placeholder="Enter Username" name="username" required>
       <div id="nameContainer"></div>
 
+      <label for="address"><b>Address</b></label>
+      <input type="text" placeholder="Please Enter Address. Example: 1250, Jalan6, Kampung Berapit, 14000 Bukit Mertajam." name="address" required>
+    
       <label for="email"><b>Email</b></label>
       <input type="email" placeholder="Enter Email" name="email" required>
       <div id="emailContainer"></div>
+
+      <label for="contact"><b>Contact</b></label>
+      <input type="text" placeholder="Enter Contact number. Example: 012-5302869" name="contact" required>
 
       <label for="password"><b>Password</b></label>
       <input type="password" placeholder="Enter Password" name="password" required>
@@ -97,9 +97,7 @@ span.psw {
       <div id="confirmContainer"></div>
       <input id="register" type="submit" name="submit" value="Submit">
 
-    </div>
-    
-  
+   
   </form>
   
     </body>

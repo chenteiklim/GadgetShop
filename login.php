@@ -14,9 +14,10 @@ if(isset($_POST['forgetPassword'])) {
     header("Location: verify.html");
     exit(); 
   }
-
+session_start();
 if (isset($_POST['submit'])) {
-  $email = $_POST['email'];
+  $email=$_POST['email'];
+  $_SESSION['email'] = $email;
   $password = $_POST['password'];
 
   mysqli_select_db($conn, $dbname); 

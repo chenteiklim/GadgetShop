@@ -9,12 +9,15 @@ $conn = new mysqli($servername, $Username, $Password);
 if ($conn->connect_error) {
   die("Connection failed: " . $conn->connect_error);
 }
-
+session_start();
 if (isset($_POST['submit'])) {
   $username = $_POST['username'];
   $email = $_POST['email'];
   $password = $_POST['password'];
   $confirm_password = $_POST['confirm_password'];
+  $address=$_POST['address'];
+  $_SESSION['address'] = $address;
+  $contact=$_POST['contact'];
 
   //Select Database
   mysqli_select_db($conn, $dbname); 
@@ -51,10 +54,10 @@ if (isset($_POST['submit'])) {
   
   else{
     // Insert the new user into the database
-    $insertUserQuery = "INSERT INTO users (name, email, password) VALUES ('$username', '$email', '$password')";
+    $insertUserQuery = "INSERT INTO users (name, address, email, password, contact) VALUES ('$username', '$address', '$email', '$password', '$contact')";
     if ($conn->query($insertUserQuery) === true) 
     {
-      header("Location: homepage.html?success=8");
+      header("Location: homepage.html?success=5");
       exit();
     }
   }
