@@ -14,7 +14,7 @@ async function getProductData2(){
 async function displayProductData2(){
     let productData2 = await getProductData2()
         let image = productData2[0].image;
-        const name=productData2[0].name
+        const product_name=productData2[0].product_name
         const status=productData2[0].status
         const price=productData2[0].price
         const quantity=productData2[0].quantity
@@ -28,7 +28,7 @@ async function displayProductData2(){
             <img class="keyboard" src="${image}" alt="">
             </div>
             <div>
-            <div class="names">${name}</div>
+            <div class="names">${product_name}</div>
             <div id='rating'>
             `
             for (let i = 1; i <= ratings; i++) {
@@ -45,7 +45,7 @@ async function displayProductData2(){
             newProduct2 +=`</div>`
             newProduct2+=`<div id="price-${0}" class="prices">RM${price}</div>` 
             newProduct2+=`
-            <form action="order.php" method="post">
+            <form action="order.php?id=1" method="post">
             <div class=quantity>
                 <label for="quantity" class=quantity_label>Quantity:</label>
                 <button id="increment">+</button>

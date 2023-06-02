@@ -25,7 +25,7 @@ if ($conn){
                 $productRow=mysqli_fetch_assoc($productResult);
                 $response[]=array(
                     'id' => $productRow['id'],
-                    'name' => $productRow['name'],
+                    'product_name' => $productRow['product_name'],
                     'price' => $productRow['price'],
                     'description' => $productRow['description'],
                     'image' => $productRow['image'],
