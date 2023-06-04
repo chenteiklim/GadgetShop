@@ -31,7 +31,7 @@
         display: flex;
     }
    
-    #addCartBtn {
+    #buyNowButton {
     background-color: black;
     color: white;
     cursor: pointer;
@@ -44,7 +44,26 @@
     font-size: 14px;
     }
 
-    #addCartBtn:active {
+    #addCartButton {
+    background-color: black;
+    color: white;
+    cursor: pointer;
+    margin-top: 20px;
+    margin-left: 50px;
+    padding-left: 10px;
+    padding-right: 10px;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    font-size: 14px;
+    }
+
+    
+    #addCartButton:active {
+    transform: scale(0.9);
+    background: radial-gradient( circle farthest-corner at 10% 20%,  rgba(255,94,247,1) 17.8%, rgba(2,245,255,1) 100.2% );
+    }
+
+    #buyNowButton:active {
     transform: scale(0.9);
     background: radial-gradient( circle farthest-corner at 10% 20%,  rgba(255,94,247,1) 17.8%, rgba(2,245,255,1) 100.2% );
     }
@@ -74,24 +93,40 @@
       
     }
 
+    .buyBtn{
+      display: flex;
+    }
+    .message-container {
+      
+      background-color: rgba(0, 0, 0, 0.7);
+      position: fixed;
+      padding-left: 120px;
+      padding-right: 120px;
+      padding-top: 90px;
+      padding-bottom: 90px;
+      color: white;
+      font-size: 30px;
+      display: flex;
+    align-items: center;
+    justify-content: center;
+    }
+
 </style>
 </head>
 <body>
 
 
 
-<div id="navContainer"> 
-  <button class="button">Keyboard</button>
-  <button class="button">Mouse</button>
-  <button class="button">Mousepad</button>
-  <button class="button">Monitor</button>
-  <button class="button">Earbud</button>
-  <button class="button">headset</button>
-  <button class="button">Casing</button>
-  <button id="logOut" class="button">Log-out</button>
-</div>
+  <div id="navContainer"> 
+    <button id='Cart' class="button">Shopping Cart</button>
+    <button class="button">Notification</button>
+    <button class="button">profile</button>
+    <button id="logOut" class="button">Log-out</button>
+    <button id="back" class="button">Back</button>
 
-<script src="keyboard7.js"></script>
+  </div>
+
+<script src="keyboard8.js"></script>
 <script src="log-out.js"></script>
 <div id="container"></div>
 

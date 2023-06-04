@@ -1,5 +1,4 @@
 <?php
-?><?php
 $servername = "localhost";
 $Username = "root";
 $Password = "";
@@ -18,19 +17,21 @@ if ($conn){
         header("Content-Type:JSON");
         $response=array();
         while($row=mysqli_fetch_assoc($result)){
-            $id=$row['id'];
+            $order_id=$row['order_id'];
             $sql = "SELECT * FROM orders WHERE order_id = $order_id";
             $productResult = mysqli_query($conn, $sql);
 
             if ($productResult){
                 $productRow=mysqli_fetch_assoc($productResult);
                 $response[]=array(
-                    'product_id' => $productRow['product_id'],
-                    'name' => $productRow['name'],
+                    'name'=>$productRow['name'],
+                    'address'=> $productRow['address'],
+                    'email'=>$productRow['email'],
+                    'order_id' => $productRow['order_id'],
+                    'product_name' => $productRow['product_name'],
                     'price' => $productRow['price'],
+                    'image' => $productRow['image'],
                     'quantity' => $productRow['quantity'],
-                    'address' => $productRow['address']
-
                 );
             }
         }

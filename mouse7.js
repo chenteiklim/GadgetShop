@@ -13,12 +13,12 @@ async function getProductData2(){
 
 async function displayProductData2(){
     let productData2 = await getProductData2()
-        let image = productData2[0].image;
-        const product_name=productData2[0].product_name
-        const status=productData2[0].status
-        const price=productData2[0].price
-        const quantity=productData2[0].quantity
-        let ratings = productData2[0].rating
+        let image = productData2[1].image;
+        const product_name=productData2[1].product_name
+        const status=productData2[1].status
+        const price=productData2[1].price
+        const quantity=productData2[1].quantity
+        let ratings = productData2[1].rating
         const quantityInput = document.getElementById('quantity_input');
 
     const container=document.querySelector('#container')
@@ -43,9 +43,9 @@ async function displayProductData2(){
             }
             newProduct2+=`<div id="status-${0}" class="status">${status} sold</div>` 
             newProduct2 +=`</div>`
-            newProduct2+=`<div id="price-${0}" class="prices">RM${price}</div>` 
+            newProduct2+=`<div id="price-${0}" class="prices">${price}</div>` 
             newProduct2+=`
-            <form action="order.php?id=1" method="post">
+            <form action="order.php?product_id=2" method="post">
             <div class=quantity>
                 <label for="quantity" class=quantity_label>Quantity:</label>
                 <button id="increment">+</button>
@@ -53,7 +53,7 @@ async function displayProductData2(){
                 <button id="decrement">-</button>
             </div>
             <div>
-                <input id="addCartBtn" class="button" type="submit" name="addOrder" value="Add To Cart">
+                <input id="buyNowButton" class="button" type="submit" name="addOrder" value="Buy Now">
             </div>
             </form>
             ` 

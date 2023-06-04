@@ -29,7 +29,7 @@ if (isset($_POST['submit'])) {
   }
   if ($result->num_rows > 0) {
       // email exists and password exists, proceed with the login
-      header("Location: homepage.html");
+      header("Location: homepage.php");
       exit(); // Ensure that further code execution is stopped after the redirection
   } 
 

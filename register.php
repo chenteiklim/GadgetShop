@@ -57,7 +57,7 @@ if (isset($_POST['submit'])) {
     $insertUserQuery = "INSERT INTO users (name, address, email, password, contact) VALUES ('$username', '$address', '$email', '$password', '$contact')";
     if ($conn->query($insertUserQuery) === true) 
     {
-      header("Location: homepage.html?success=5");
+      header("Location: homepage.php?success=5");
       exit();
     }
   }
