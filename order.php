@@ -32,7 +32,8 @@ if (isset($_POST['addOrder'])) {
     if ($tableExists->num_rows == 0) {
         // Create the table if it doesn't exist
         $createTableQuery = "CREATE TABLE $tableName (
-            id INT(6) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+            id VARCHAR(10) PRIMARY KEY NOT NULL,
+            user_id INT(6) NOT NULL,
             product_id INT(6) NOT NULL,
             quantity INT(6) NOT NULL,
             name VARCHAR(255) NOT NULL,
@@ -42,7 +43,6 @@ if (isset($_POST['addOrder'])) {
             price DECIMAL(10, 2) NOT NULL,
             image VARCHAR(255) NOT NULL
         )";
-
         if ($conn->query($createTableQuery) === TRUE) {
             echo "Table '$tableName' created successfully.";
         } else {
@@ -86,12 +86,40 @@ if (isset($_POST['addOrder'])) {
         echo($address);
 
         mysqli_select_db($conn, $dbname); 
-    $insertUserQuery = "INSERT INTO user_$user_id (product_id,quantity,name,email,address,product_name,price,image) VALUES ('$product_id','$quantity','$name','$email','$address','$product_name','$price','$image')";
-        if ($conn->query($insertUserQuery) === true) 
-            {
-                header("Location: confirm.php");
-                exit();
-            }
+        
+
+// Check if the ID exists in the table
+$checkQuery = "SELECT COUNT(*) AS count FROM user_" . $user_id . " WHERE id = 1";
+$checkResult = $conn->query($checkQuery);
+
+if ($checkResult && $checkResult->num_rows > 0) {
+    $row8 = $checkResult->fetch_assoc();
+    $count = $row8['count'];
+
+    if ($count > 0) {
+        // If the ID exists, fetch the highest ID value
+        $maxIdQuery = "SELECT MAX(id) AS max_id FROM user_$user_id";
+        $maxIdResult = $conn->query($maxIdQuery);
+
+        if ($maxIdResult && $maxIdResult->num_rows > 0) {
+            $row9 = $maxIdResult->fetch_assoc();
+            $maxId = $row9['max_id'];
+            $id2 = $maxId + 1;
+        }
+    }
+}
+
+// If the ID is still not set, set it to 1
+if (!isset($id2)) {
+    $id2 = 1;
+}
+
+$insertUserQuery = "INSERT INTO user_$user_id (id,user_id,product_id,quantity,name,email,address,product_name,price,image) VALUES ('$id2','$user_id','$product_id','$quantity','$name','$email','$address','$product_name','$price','$image')";
+
+if ($conn->query($insertUserQuery) === true) {
+    header("Location: confirm2.php");
+    exit();
+}
 
 
 ?>
