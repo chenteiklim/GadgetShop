@@ -12,15 +12,40 @@ if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
 
+
+
 session_start();
 $email = $_SESSION['email'];
 
-$sql = "SELECT user_id FROM users WHERE email = '$email'";
+$selectNameQuery = "SELECT name FROM users WHERE email = '$email'";
+// Execute the query
+$result = $conn->query($selectNameQuery);
+
+if ($result->num_rows > 0) {
+    // Fetch the row from the result
+    $row = $result->fetch_assoc();
+}
+// Get the address value from the fetched row
+$name = $row['name'];
+
+mysqli_select_db($conn, $dbname);
+$sql = "SELECT address,contact FROM users WHERE email = '$email'";
 $result = $conn->query($sql);
 
 if ($result->num_rows > 0) {
     // Fetch the user ID from the result
     $row = $result->fetch_assoc();
+    $address = $row['address'];
+    $contact = $row['contact'];
+}
+
+
+$sql2 = "SELECT user_id FROM users WHERE email = '$email'";
+$result2 = $conn->query($sql2);
+
+if ($result2->num_rows > 0) {
+    // Fetch the user ID from the result
+    $row = $result2->fetch_assoc();
     $user_id = $row['user_id'];
 }
 mysqli_select_db($conn, $dbname);
@@ -106,7 +131,6 @@ body{
 width:1200px;
 background-color: #CDCDCD;
 display: flex;
-align-items:center;
 flex-direction:column;
 height: 100%;
 
@@ -174,19 +198,13 @@ height: 100%;
 #checkOut{
     background-color:white;
     display:flex;
-    font-size: 25px;
+    font-size: 20px;
     width:1200px;
     margin-top:480px;
     height:400px;
     position: fixed;
 }
 
-.total{
-    width:700px;
-    margin-left:400px;
-    margin-top:120px;
-    display:flex;
-}
 
 #total_item{
     padding-left:10px;
@@ -226,7 +244,6 @@ button {
     
     body{
         display:flex;
-        text-align:center;
         align-items:center;
         background-color: bisque;
         width: 1400px;
@@ -241,6 +258,63 @@ button {
     
     #logOut{
         margin-left: 200px;
+    }
+
+    .total{
+        margin-left:800px;
+    }
+
+    .user-info{
+        display:flex;
+        flex-direction:column;
+    }
+    .title2{
+        margin-top:20px;
+        font-size:22px;
+        color:red;
+        margin-right:500px;
+    }
+
+    .content2{
+        margin-top:10px;
+        font-size:18px;
+        margin-right:200px;
+        display:flex;
+    }
+
+    .address{
+        margin-right:20px;
+    }
+
+    .item10{
+        margin-left:100px
+    }
+
+    .row{
+        margin-top:10px;
+        display:flex;
+    }
+
+    .row2{
+        margin-left:20px;
+    }
+    .row3{
+        margin-left:82px;
+    }
+    .row4{
+        margin-left:78px;
+    }
+    .text{
+        margin-top:30px;
+        margin-left:600px;
+    }
+    #checkOutbtn{
+        margin-top:20px;
+        margin-left:50px;
+    }
+
+    .payment{
+        margin-left:100px;
     }
     </style>
 </head>
@@ -259,6 +333,24 @@ button {
   
 </div>
 <div id="container">
+    <div class='item10'>
+    <div class='user-info'>
+        <div class='title2'>
+            Delivery Address
+        </div>
+        <div class='content2'>
+            <div class='address'>
+                <?php echo $name;?>
+            </div>
+            <div class='address'>
+                <?php echo $contact;?>
+            </div>
+            <div class='address'>
+                <?php echo $address;?>
+            </div>   
+        </div>
+    </div>
+
 <div class='title'>
     <div class="Product"><?php echo 'Product'; ?> </div>
     <div class="product_name"><?php echo 'Product Name'; ?></div>
@@ -285,43 +377,55 @@ for ($order_id = 1; $order_id <= $maxId ; $order_id++) {
         $quantity = $row['quantity'];
         $total_price=$row['total_price'];
         $grandTotal += $total_price;
-        $product_ids[] = $product_id;
-        $_SESSION['product_ids'] = $product_ids;
-
     }
-
-    
 ?>  
 <div class="content">
     <img class="item" src="<?php echo $image; ?>" alt="">
     <div class="product_name"><?php echo $product_name; ?></div>
     <div id="price"><?php echo 'RM'.$price; ?></div>
     <div id="quantity">x<?php echo $quantity; ?></div>
-    <div id="total_price"><?php echo 'RM'.$total_price; ?></div>
-    <form action="confirm2.php" method="POST">
-        <input type="hidden" name="product_id" value="<?php echo $product_id; ?>">
-        <button type="submit" class="delete-button">Delete</button>
-    </form>  
+    <div id="total_price"><?php echo 'RM'.$total_price; ?></div> 
 </div>
 
-<script src="confirm.js"></script>
 <?php
+$Total=$grandTotal+9;
 }
 ?>
-</div>
-    <div id="checkOut">
-        <form action="checkOut.php" method="POST">
-            <div class="total">
+ </div>
+ <div id="checkOut">
+    <div class='text'>
+        <form action="payment.php" method="POST">
+            <div class="row">
+                <div>
+                    Merchandise Subtotal
+                </div>
+                <div class='row2'>
+                    <?php echo "RM $grandTotal"?>
+                </div>
+            </div>
+            <div class="row">
             <div>
-            Total
+                    Shipping total
+                </div>
+                <div class='row3'>
+                    <?php echo "RM9.00"?>
+                </div>
             </div>
-            <div id="total_item">
-            <?php echo "($total_rows item):"?>
+            <div class='row'>
+                <div>
+                    Total Payment
+                </div>
+                <div class='row4'>
+                    <?php echo "RM $Total"?>
+                </div>
             </div>
-            <div id="total_prices">
-            <?php echo "RM $grandTotal"?>
-                <button id="checkOutbtn" class="button"><?php echo 'Check Out' ?></button>
-        </form>  
+                <button id="checkOutbtn" class="button"><?php echo 'Place Order' ?></button>
+            </form>  
+
     </div>
+</div>
+<div class='payment'>
+     Payment Method
+     <button id="checkOutbtn" class="button"><?php echo 'Online Banking' ?></button>
 </div>
 </div>

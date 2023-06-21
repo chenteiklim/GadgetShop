@@ -15,6 +15,16 @@ $product_id = $_SESSION['product_id'];
 $email=$_SESSION['email'];
 mysqli_select_db($conn, $dbname);
 // Execute the query
+$selectNameQuery = "SELECT name FROM users WHERE email = '$email'";
+// Execute the query
+$result = $conn->query($selectNameQuery);
+
+if ($result->num_rows > 0) {
+    // Fetch the row from the result
+    $row = $result->fetch_assoc();
+}
+    // Get the address value from the fetched row
+    $name = $row['name'];
 
 $sql = "SELECT * FROM products WHERE product_id = '$product_id'";
 $result = $conn->query($sql);
@@ -33,8 +43,8 @@ if ($result->num_rows > 0) {
 }
 
 
+?>
 
-$newProduct2 = '
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -55,7 +65,7 @@ $newProduct2 = '
   <div id="navContainer"> 
     <button id="Cart" class="button">Shopping Cart</button>
     <button class="button">Notification</button>
-    <button class="button">profile</button>
+    <button class="button"><?php echo $name ?></button>
     <button id="logOut" class="button">Log-out</button>
     <button id="back" class="button">Back</button>
 
@@ -120,15 +130,19 @@ $newProduct2 = '
     }
 
     .quantity{
+      display:flex;
+      align-items: center;
       padding-left:50px ;
     }
 
     #increment{
+      margin-bottom:20px;
       margin-left:15px ;
       margin-right: 0px;
     }
 
     #quantity_input{
+      margin-top:0px;
       margin-left: 0px;
       padding-top: 5px;
       padding-bottom: 5px;
@@ -138,6 +152,7 @@ $newProduct2 = '
     }
 
     #decrement{
+      margin-bottom:20px;
       margin-left:0px;
       padding-left: 13px;
       padding-right: 13px;
@@ -165,26 +180,30 @@ $newProduct2 = '
 </style>
     <div id="container">
         <div>
-            <img class="keyboard" src="' . $image . '" alt="">
+            <img class="keyboard" src="<?php echo $image; ?>" alt="">
         </div>
         <div>
-            <div class="names">' . $product_name . '</div>
-            <div id="rating">';
+            <div class="names"><?php echo $product_name; ?> </div>
+            <div id="rating">
 
+<?php
 for ($i = 1; $i <= $rating; $i++) {
-    $newProduct2 .= '
-        <span class="fa fa-star checked"></span>';
+?>
+  <span class="fa fa-star checked"></span>
+<?php
 }
 
 for ($i = $rating + 1; $i <= 5; $i++) {
-    $newProduct2 .= '
-        <span class="fa fa-star"></span>';
+?>
+    <span class="fa fa-star"></span>
+    <?php
 }
+?>
 
-$newProduct2 .= '
-            <div id="status-' . 0 . '" class="status">' . $status . ' sold</div>
+
+            <div id="status-' . 0 . '" class="status"><?php echo $status.'sold' ; ?></div>
         </div>
-        <div id="price-' . 0 . '" class="prices">' . $price . '</div>
+        <div id="price-<?php echo 0; ?>" class="prices"><?php echo'RM'.$price; ?></div>
         <form action="order.php?product_id=1" method="post">
             <div class="quantity">
                 <label for="quantity" class="quantity_label">Quantity:</label>
@@ -203,10 +222,10 @@ $newProduct2 .= '
             </div>
         </form>
     </div>
-</div>';
+</div>
 
-echo $newProduct2;
-?>
+<script src="confirm.js"></script>
+
 <script>
 const quantity_input=document.getElementById('quantity_input');  
 const incrementButton = document.getElementById('increment');
@@ -242,9 +261,15 @@ decrementButton.addEventListener('click', function(event) {
       }, 2000);
   });
   document.getElementById("Cart").addEventListener("click", function() {
-    window.location.href = "confirm.php";
+    window.location.href = "confirm2.php";
   });
 
+  document.getElementById('back').addEventListener('click', function(e) {
+    e.preventDefault();
+    window.location.href = 'homepage.php';
+  })
+
+  
 </script>
 
   

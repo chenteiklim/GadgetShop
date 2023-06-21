@@ -13,7 +13,7 @@ if ($conn->connect_error) {
 if (isset($_POST['addOrder'])) {
     session_start();
     $email = $_SESSION['email'];
-    $product_id = $_GET['product_id'];
+    $product_id = $_SESSION['product_id'];
     echo($product_id);
     mysqli_select_db($conn, $dbname);
     $sql = "SELECT user_id FROM users WHERE email = '$email'";
@@ -41,7 +41,9 @@ if (isset($_POST['addOrder'])) {
             address VARCHAR(255) NOT NULL,
             product_name VARCHAR(255) NOT NULL,
             price DECIMAL(10, 2) NOT NULL,
-            image VARCHAR(255) NOT NULL
+            image VARCHAR(255) NOT NULL,
+            total_price VARCHAR(255) NOT NULL,
+            contact VARCHAR(255) NOT NULL
         )";
         if ($conn->query($createTableQuery) === TRUE) {
             echo "Table '$tableName' created successfully.";
@@ -70,8 +72,8 @@ if (isset($_POST['addOrder'])) {
     $quantity = $_POST['quantity_input'];
     $_SESSION['quantity'] = $quantity;
     $email=$_SESSION['email'];
-    
-    $selectAddressQuery = "SELECT name,address FROM users WHERE email = '$email'";
+    $total_price=$quantity*$price;
+    $selectAddressQuery = "SELECT name,address,contact FROM users WHERE email = '$email'";
     // Execute the query
     $result = $conn->query($selectAddressQuery);
 
@@ -82,6 +84,7 @@ if (isset($_POST['addOrder'])) {
         // Get the address value from the fetched row
         $name = $row['name'];
         $address = $row['address'];
+        $contact= $row['contact'];
         echo($name);
         echo($address);
 
@@ -114,12 +117,34 @@ if (!isset($id2)) {
     $id2 = 1;
 }
 
-$insertUserQuery = "INSERT INTO user_$user_id (id,user_id,product_id,quantity,name,email,address,product_name,price,image) VALUES ('$id2','$user_id','$product_id','$quantity','$name','$email','$address','$product_name','$price','$image')";
 
-if ($conn->query($insertUserQuery) === true) {
-    header("Location: confirm2.php");
-    exit();
+$checkQuery2 = "SELECT COUNT(*) AS count FROM user_" . $user_id . " WHERE product_id = $product_id";
+$checkResult2 = $conn->query($checkQuery2);
+
+if ($checkResult2 && $checkResult2->num_rows > 0) {
+    $row3 = $checkResult2->fetch_assoc();
+    $count3 = $row3['count'];
+
+    if ($count3 > 0) {
+        // If the ID exists, perform the desired action
+        echo "Product ID exists.";
+        header("Location: product.php");
+    }
+    else{
+        $insertUserQuery = "INSERT INTO user_$user_id (id,user_id,product_id,quantity,name,email,address,product_name,price,image,total_price,contact) VALUES ('$id2','$user_id','$product_id','$quantity','$name','$email','$address','$product_name','$price','$image','$total_price','$contact')";
+        
+        if ($conn->query($insertUserQuery) === true) {
+            header("Location: confirm2.php");
+            exit();
+        }
+        else {
+            // Handle the error if the query fails
+            echo "Error inserting order: " . $conn->error;
+        }
+        }
 }
+
+
 
 
 ?>

@@ -180,8 +180,30 @@ if ($result->num_rows > 0) {
 .checked{
     color: orange;
 }
+
+
+#navContainer{
+        width:1200px;
+        background-color: black;
+    }
+    
+    #logOut{
+        margin-left: 200px;
+    }
     </style>
 </head>
+
+<div id="navContainer"> 
+<form id="dataForm">
+    <!-- Your form fields here -->
+    <input type="hidden" name="data" value="<?php echo $_SESSION['data']; ?>">
+    <button class="button"><?php echo 'Shopping Cart'; ?></button>
+    <button class="button"><?php echo 'Notification' ?></button>
+    <button class="button"><?php echo $name ?></button>
+    <button id="logOut" class="button"><?php echo 'Log Out' ?></button>
+</form>
+  
+</div>
 <div id="container">
 
     <?php
@@ -227,7 +249,7 @@ if ($result->num_rows > 0) {
       $newProduct2 .= '
       <div class="status">' . $status . ' sold</div>
       <form action="" method="post">
-      <button type="submit" name="view" value="' . $button_id . '">View</button>
+      <button class="button" type="submit" name="view" value="' . $button_id . '">View</button>
       </form>
      
     </div>
