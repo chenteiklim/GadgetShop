@@ -11,7 +11,7 @@ if ($conn->connect_error) {
 }
 
 mysqli_select_db($conn, $dbname);
-$selectOrderQuery = "SELECT user_id, order_id, name, email, address, contact, clickDate FROM orders";
+$selectOrderQuery = "SELECT user_id, order_id, name, email, address, contact, date FROM orders";
 $result = $conn->query($selectOrderQuery);
 
 if ($result->num_rows > 0) {
@@ -22,7 +22,7 @@ if ($result->num_rows > 0) {
     $email = $row['email'];
     $address = $row['address'];
     $contact = $row['contact'];
-    $clickDate = $row['clickDate'];
+    $clickDate = $row['date'];
     $shippingDate = date('Y-m-d', strtotime($clickDate . '+1 day'));
     $deliveryDate = date('Y-m-d', strtotime($clickDate . '+4 days')); // 1 day for shipping + 3 days for delivery
   }
@@ -61,7 +61,7 @@ body{
 }
 .container{
     margin-top:100px;
-    margin-left:400px;
+    margin-left:100px;
     display:flex;
     justify-content:center;
     background-color:white;
@@ -69,8 +69,8 @@ body{
     height:200px;
 }
 .row{
-    margin-right:600px;
-    margin-bottom: 300px;
+    margin-right:100px;
+    margin-top:20px;
     display: flex;
     width: 400px;
 }/* CSS for tracking elements */

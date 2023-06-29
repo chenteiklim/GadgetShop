@@ -315,6 +315,10 @@ button {
 
 <div id="navContainer"> 
 <form action="mainpage.php" method="POST">
+    <!-- Your form fields here -->
+    <button class="button"><?php echo 'Shopping Cart'; ?></button>
+    <button class="button"><?php echo 'Notification' ?></button>
+    <button class="button"><?php echo $name;?></button>
     <button id="logOut" class="button"><?php echo 'Log Out' ?></button>
         <button type="submit" class="back-button">Home</button>
 </form>  

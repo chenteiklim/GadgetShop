@@ -219,6 +219,7 @@ if ($result->num_rows > 0) {
     <input type="hidden" name="data" value="<?php echo $_SESSION['data']; ?>">
     <button class="button" onclick="window.location.href = 'cart.php';"><?php echo 'Shopping Cart'; ?></button>
     <button class="button" id="tracking"><?php echo 'Tracking' ?></button>
+    <button class="button" id="purchase"><?php echo 'Orders' ?></button>
     <button class="button"><?php echo $name ?></button>
     <button id="logOut" class="button"><?php echo 'Log Out' ?></button>
     <div id="messageContainer"></div>
@@ -299,6 +300,14 @@ var tracking = document.getElementById("tracking");
 tracking.addEventListener("click", function() {
   // Perform the navigation action here
   window.location.href = "tracking.php";
+});
+
+
+var purchase = document.getElementById("purchase");
+
+purchase.addEventListener("click", function() {
+  // Perform the navigation action here
+  window.location.href = "purchased.php";
 });
 
 window.onload = function() {
