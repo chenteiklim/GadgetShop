@@ -7,7 +7,14 @@
     <title>Document</title>
     <link rel="icon" href="logo.jpg" type="image/jpg">
     <style>
-     body {font-family: Arial, Helvetica, sans-serif;
+     body {
+      background-color: bisque;
+      margin-left: 20px;
+    }
+
+.title{
+  display: flex;
+  align-items: center;
 }
 
 input[type=text], input[type=password] ,input[type=email] {
@@ -19,28 +26,12 @@ input[type=text], input[type=password] ,input[type=email] {
   box-sizing: border-box;
 }
 
-#register {
-  background-color: #04AA6D;
-  color: white;
-  padding: 14px 20px;
-  margin: 8px 0;
-  border: none;
-  cursor: pointer;
-  width: 120px;
-}
-
-#register:hover {
-  opacity: 0.8;
-}
-
-
-.imgcontainer {
-  text-align: center;
-  margin: 24px 0 12px 0;
-  color: white;
-}
 
 .container {
+  background-color: white;
+  width:420px;
+  margin-top:20px;
+  margin-left:550px;
   padding: 16px;
 }
 
@@ -49,6 +40,46 @@ span.psw {
   padding-top: 16px;
 }
 
+.img{
+  margin-left:400px;
+  width:50px;
+  height:50px;
+  }
+
+  #navContainer{
+    color:white;
+      display:flex;
+     align-items:center;
+    background-color: black;
+    }
+
+    .button {
+    background-color: black;
+    color: white;
+    cursor: pointer;
+    padding-left: 30px;
+    padding-right: 30px;
+    padding-top: 10px;
+    margin-top: 10px;
+    padding-bottom: 10px;
+    font-size: 16px;
+    }
+
+    #Login{
+      margin-left: 200px;
+    }
+    
+    .button:active {
+      transform: scale(0.9);
+      background: radial-gradient( circle farthest-corner at 10% 20%,  rgba(255,94,247,1) 17.8%, rgba(2,245,255,1) 100.2% );
+    }
+
+      #title{
+        margin-left: 600px;
+        margin-top: 30px;
+        font-size: 30px;
+      }
+    
 
 
 /* Change styles for span and cancel button on extra small screens */
@@ -64,13 +95,22 @@ span.psw {
   #register{
   width: 80px;
   }
+
+  
 }
     </style>
 </head>
 <body>
-
-  <h2>Register Form for users</h2>
   
+<div id="navContainer"> 
+  <img class='img' src="pitStop.png" alt="" srcset="">
+    <button id="Login" class="button">Log in</button>
+      <button id='home' class='button'>home</button>
+</div>
+<div id="title">
+  Register
+</div>
+<div id="container">
   <form action="register.php" method="post">
   
     <div class="container">
@@ -79,7 +119,7 @@ span.psw {
       <div id="nameContainer"></div>
 
       <label for="address"><b>Address</b></label>
-      <input type="text" placeholder="Please Enter Address. Example: 1250, Jalan6, Kampung Berapit, 14000 Bukit Mertajam." name="address" required>
+      <input type="text" placeholder="Enter Address. Eg: 1250, Jalan6, Kampung Berapit, 14000 BM." name="address" required>
     
       <label for="email"><b>Email</b></label>
       <input type="email" placeholder="Enter Email" name="email" required>
@@ -95,11 +135,113 @@ span.psw {
       <label for="confirm_password"><b>Confirm Password</b></label>
       <input type="password" placeholder="Enter Password Again" name="confirm_password" required>
       <div id="confirmContainer"></div>
-      <input id="register" type="submit" name="submit" value="Submit">
-
-   
+      <input id="register" class="button" type="submit" name="submit" value="Register">
+  
   </form>
   
+</div>
+  
     </body>
-    <script src="register.js"></script>
-</html>
+      </html>
+    <script>
+  var home = document.getElementById("home");
+  
+  home.addEventListener("click", function(event) {
+    event.preventDefault()
+    window.location.href = "homepage.php";
+  });
+
+  var Login = document.getElementById("Login");
+  
+  Login.addEventListener("click", function(event) {
+    event.preventDefault()
+    window.location.href = "login.html";
+  });
+
+  // Retrieve the value of the 'success' query parameter from the URL
+const urlParams = new URLSearchParams(window.location.search);
+const Param = urlParams.get('success');
+
+  if (Param === '1') { 
+
+    //create Div
+    const nameDiv = document.createElement('div');
+    
+    
+ 
+
+    //add CSS class
+    nameDiv.classList.add('nameMessage'); 
+    
+    // Set the inner text of the div to the success message
+    nameDiv.innerText = 'Username already exists. Please choose a different username.';
+    const nameContainer = document.getElementById('nameContainer');
+    nameContainer.appendChild(nameDiv);
+    }
+    
+    else if (Param === '2') {
+    
+    const emailDiv = document.createElement('div');
+    emailDiv.classList.add('emailMessage'); 
+    
+    emailDiv.innerText = 'Email already exists. Please choose a different email.';
+    
+    const emailContainer = document.getElementById('emailContainer');
+    emailContainer.appendChild(emailDiv);
+    }
+    
+    else if (Param === '3') {
+    
+    const passwordDiv = document.createElement('div');
+    passwordDiv.classList.add('passwordMessage');
+    
+    passwordDiv.innerText = 'Registration failed. Please choose a different password.';
+    
+    const passwordContainer = document.getElementById('passwordContainer');
+    passwordContainer.appendChild(passwordDiv);
+    }
+    
+    else if (Param === '4') {
+    
+    const confirmDiv = document.createElement('div');
+    confirmDiv.classList.add('confirmMessage'); // Add the CSS class to the div
+    
+    confirmDiv.innerText = 'Password do not match with Confirm password.';
+    
+    const confirmContainer = document.getElementById('confirmContainer');
+    confirmContainer.appendChild(confirmDiv);
+    }
+    
+    else if (Param === '5') {
+    
+    const successDiv = document.createElement('div');
+    successDiv.classList.add('successMessage');
+    
+    successDiv.innerText = 'Register successfully!';
+    
+    const successMessage = document.getElementById('successMessage1');
+    successMessage.appendChild(successDiv);
+    }
+    
+    
+    if (Param === '6') { 
+    const passwordDiv2 = document.createElement('div');
+    passwordDiv2.classList.add('successMessage');
+    
+    passwordDiv2.innerText = 'Password do not match!';
+    
+    const successMessage2 = document.getElementById('successMessage2');
+    successMessage2.appendChild(passwordDiv2);
+    }
+    
+    
+    if (Param === '7') { 
+    const successDiv3 = document.createElement('div');
+    successDiv3.classList.add('successMessage');
+    
+    successDiv3.innerText = 'Password change successfully!';
+    
+    const successMessage3 = document.getElementById('successMessage3');
+    successMessage3.appendChild(successDiv3);
+    }
+    </script>

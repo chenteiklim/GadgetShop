@@ -1,3 +1,4 @@
+
 <?php
 
 $servername = "localhost";
@@ -12,7 +13,18 @@ if ($conn->connect_error) {
 }
 
 session_start();
+$email=$_SESSION['email'];
+mysqli_select_db($conn, $dbname);
+$selectNameQuery = "SELECT name FROM users WHERE email = '$email'";
+// Execute the query
+$result = $conn->query($selectNameQuery);
 
+if ($result->num_rows > 0) {
+    // Fetch the row from the result
+    $row = $result->fetch_assoc();
+}
+    // Get the address value from the fetched row
+    $name = $row['name'];
 
     mysqli_select_db($conn, $dbname);
     $maxIdQuery = "SELECT MAX(product_id) AS max_id FROM products";
@@ -48,7 +60,8 @@ session_start();
 
   display: flex;
   flex-direction: row;
-  flex-wrap:wrap;
+  flex-wrap: wrap;
+
 }
 
 .item{
@@ -88,7 +101,7 @@ session_start();
     padding-right: 30px;
     padding-top: 10px;
     padding-bottom: 10px;
-    font-size: 16px;
+    font-size: 12px;
     }
 #btn {
     background-color: black;
@@ -99,7 +112,7 @@ session_start();
     padding-top: 10px;
     margin-top: 10px;
     padding-bottom: 10px;
-    font-size: 16px;
+    font-size: 12px;
     }
     
     button:active {
@@ -121,6 +134,7 @@ session_start();
     background-color: antiquewhite;
 }
 .productDetails{
+  background-color:white;
   font-size:18px;
   display: flex;
   flex-direction: column;
@@ -140,9 +154,11 @@ session_start();
     letter-spacing: 0.2px
 }
     #navContainer{
-      display:flex;
-     align-items:center;
-    background-color: black;
+        background-color: black;
+    }
+    
+    #logOut{
+        margin-left: 200px;
     }
 
     
@@ -151,38 +167,62 @@ session_start();
     font-size: 12px;
 }
 
+#description1{
+    display: flex;
+    align-items: center;
+}
+#rating{
+}
+.starItem{
+    width: 20px;
+    height: 20px;
+}
+
+
 
 .checked{
     color: orange;
 }
 
-
-#navContainer{
+#row{
   display:flex;
+}
+#navContainer{
         width:1400px;
         background-color: black;
     }
-
-#register{
-    margin-left: 600px;
-}
-
-.img{
-  margin-left:50px;
-  width:50px;
-  height:50px;
-  }
-
-
-  
+    
+    #logOut{
+        margin-left: 200px;
+    }
+    
+    .message-container {
+      
+      background-color: rgba(0, 0, 0, 0.7);
+      position: fixed;
+      padding-left: 120px;
+      padding-right: 120px;
+      padding-top: 90px;
+      padding-bottom: 90px;
+      color: white;
+      font-size: 30px;
+      display: flex;
+    align-items: center;
+    justify-content: center;
+    }
     </style>
 </head>
 
 <div id="navContainer"> 
-  <img class='img' src="pitStop.png" alt="" srcset="">
-    <button class="button" id='register'><?php echo 'Register'?></button>
-    <button id="login" class="button"><?php echo 'Log in' ?></button>
-    <button id='seller' class='button'><?php echo 'seller center' ?></button>
+
+    <!-- Your form fields here -->
+    <input type="hidden" name="data" value="<?php echo $_SESSION['data']; ?>">
+    <button class="button" onclick="window.location.href = 'cart.php';"><?php echo 'Shopping Cart'; ?></button>
+    <button class="button" id="tracking"><?php echo 'Tracking' ?></button>
+    <button class="button"><?php echo $name ?></button>
+    <button id="logOut" class="button"><?php echo 'Log Out' ?></button>
+    <div id="messageContainer"></div>
+
 </div>
 <div id="container">
 
@@ -199,26 +239,26 @@ session_start();
           $status=$row['status'];
           $button_id = $product_id;
 
-    $newProduct2 = '
-    <div class="product">
-      <div class="imageContainer">
-          <img class="item" src="' . $image . '" alt="">
-      </div>
-      <div class="productDetails">
-        <div class="product_name">' . $product_name . '</div>
-        <div class="price">
-          <div class="unit">RM</div>
-          <div>' . $price . '</div>
-        </div>
-    
-      <div class="status">' . $status . ' sold</div>
-      <form action="" method="post">
-      <button class="button" type="submit" name="view" value="' . $button_id . '">View</button>
-      </form>
-     
-    </div>
-    </div>
-    ';
+          $newProduct2 = '
+          <div class="product">
+            <div class="imageContainer">
+                <img class="item" src="' . $image . '" alt="">
+            </div>
+            <div class="productDetails">
+              <div class="product_name">' . $product_name . '</div>
+              <div class="price">
+                <div class="unit">RM</div>
+                <div>' . $price . '</div>
+              </div>
+          
+            <div class="status">' . $status . ' sold</div>
+            <form action="" method="post">
+            <button class="button" type="submit" name="view" value="' . $button_id . '">View</button>
+            </form>
+           
+          </div>
+          </div>
+          ';
     $productHTML .= $newProduct2;
     
   }
@@ -233,10 +273,12 @@ session_start();
     if (isset($_SESSION['product_id'])) {
       // Product ID is saved in the session
       $product_id = $_SESSION['product_id'];
-      echo '<script>window.location.href = "login.html";</script>';
+      echo '<script>window.location.href = "product.php";</script>';
      
       
-  } else {
+  } 
+  
+  else {
       // Product ID is not saved in the session
       echo "Product ID not found in the session.";
   }
@@ -244,35 +286,36 @@ session_start();
     exit;
 }
 ?>
-</div>
-
 <script>
-  const registerButton = document.getElementById('register');
+var logOutButton = document.getElementById("logOut");
 
-// Add an event listener to the button
-registerButton.addEventListener('click', function() {
-  // Code to navigate to another page goes here
-  // For example, you can use the window.location.href property to redirect to a new URL
-  window.location.href = 'register.html';
+logOutButton.addEventListener("click", function() {
+  // Perform the navigation action here
+  window.location.href = "login.html";
 });
 
+var tracking = document.getElementById("tracking");
 
-const loginButton = document.getElementById('login');
-
-// Add an event listener to the button
-loginButton.addEventListener('click', function() {
-  // Code to navigate to another page goes here
-  // For example, you can use the window.location.href property to redirect to a new URL
-  window.location.href = 'login.html';
+tracking.addEventListener("click", function() {
+  // Perform the navigation action here
+  window.location.href = "tracking.php";
 });
 
-const sellerButton = document.getElementById('seller');
+window.onload = function() {
+  var urlParams = new URLSearchParams(window.location.search);
+  var message = urlParams.get('message');
 
-// Add an event listener to the button
-sellerButton.addEventListener('click', function() {
-  // Code to navigate to another page goes here
-  // For example, you can use the window.location.href property to redirect to a new URL
-  window.location.href = 'sellerLogin.html';
-});
-
+  if (message) {
+    var messageContainer = document.getElementById("messageContainer");
+    messageContainer.textContent = message;
+    messageContainer.style.display = "block";
+    messageContainer.classList.add("message-container");
+    setTimeout(function() {
+      messageContainer.style.display = "none";
+    }, 3000);
+  }
+};
 </script>
+
+  
+   

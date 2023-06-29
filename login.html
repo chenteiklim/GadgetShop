@@ -1,16 +1,23 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>Login for users</title>
-	<link rel="icon" href="logo.jpg" type="image/jpg">
-  <meta charset="UTF-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <style>
-    body {font-family: Arial, Helvetica, sans-serif;}
-form {border: 3px solid #f1f1f1;}
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="icon" href="logo.jpg" type="image/jpg">
+    <style>
+     body {
+      background-color: bisque;
+      margin-left: 20px;
+    }
 
-input[type=email], input[type=password] {
+.title{
+  display: flex;
+  align-items: center;
+}
+
+input[type=text], input[type=password] ,input[type=email] {
   width: 100%;
   padding: 12px 20px;
   margin: 8px 0;
@@ -19,38 +26,12 @@ input[type=email], input[type=password] {
   box-sizing: border-box;
 }
 
-#login{
-  background-color: #04AA6D;
-  color: white;
-  padding: 14px 20px;
-  border: none;
-  cursor: pointer;
-  width: 120px;
-}
-
-#reset{
-  background-color: rgb(13, 164, 13);
-  color: white;
-  padding: 10px 16px;
-  margin-top: 10px;
-  border: none;
-  cursor: pointer;
-  width: 160px;
-  border-radius: 5%;
-}
-
-#login:hover, #reset:hover {
-  opacity: 0.8;
-}
-
-
-.imgcontainer {
-  text-align: center;
-  margin: 24px 0 12px 0;
-  color: white;
-}
 
 .container {
+  background-color: white;
+  width:420px;
+  margin-top:20px;
+  margin-left:550px;
   padding: 16px;
 }
 
@@ -58,6 +39,48 @@ span.psw {
   float: right;
   padding-top: 16px;
 }
+
+.img{
+  margin-left:400px;
+  width:50px;
+  height:50px;
+  }
+
+  #navContainer{
+    color:white;
+      display:flex;
+     align-items:center;
+    background-color: black;
+    }
+
+    .button {
+    background-color: black;
+    color: white;
+    cursor: pointer;
+    padding-left: 30px;
+    padding-right: 30px;
+    padding-top: 10px;
+    margin-top: 10px;
+    padding-bottom: 10px;
+    font-size: 16px;
+    }
+
+    #Register{
+      margin-left: 200px;
+    }
+    
+    .button:active {
+      transform: scale(0.9);
+      background: radial-gradient( circle farthest-corner at 10% 20%,  rgba(255,94,247,1) 17.8%, rgba(2,245,255,1) 100.2% );
+    }
+
+      #title{
+        margin-left: 600px;
+        margin-top: 30px;
+        font-size: 30px;
+      }
+    
+
 
 /* Change styles for span and cancel button on extra small screens */
 @media screen and (max-width: 300px) {
@@ -69,32 +92,59 @@ span.psw {
      width: 100%;
   }
 
- #login{
-	width: 80px;
+  #register{
+  width: 80px;
   }
-}
 
-  </style>
+  
+}
+    </style>
 </head>
 <body>
+  
+<div id="navContainer"> 
+  <img class='img' src="pitStop.png" alt="" srcset="">
+    <button id="Register" class="button">Register</button>
+      <button id='home' class='button'>home</button>
+</div>
+<div id="title">
+  Login
+</div>
+<div id="container">
+  <form action="login.php" method="post">
+  
+    <div class="container">
+    
+      <label for="email"><b>Email</b></label>
+      <input type="email" placeholder="Enter Email" name="email" required>
+      <div id="emailContainer"></div>
 
-<h2>Login Form for users</h2>
+      <label for="password"><b>Password</b></label>
+      <input type="password" placeholder="Enter Password" name="password" required>
+      <div id="passwordContainer"></div>
 
-<form action="login.php" method="post">
-  <div class="container">
-    <label for="email"><b>Email</b></label>
-    <input type="email" placeholder="Enter email" name="email" required>
+      <input id="login" class="button" type="submit" name="submit" value="Login">
+  
+  </form>
+  
+</div>
+  
+    </body>
+      </html>
+    <script>
+  var home = document.getElementById("home");
+  
+  home.addEventListener("click", function(event) {
+    event.preventDefault()
+    window.location.href = "homepage.php";
+  });
 
-    <label for="password"><b>Password</b></label>
-    <input type="password" placeholder="Enter Password" name="password" required>
-    <input id="login" type="submit" name="submit" value="login">
-    <div>
-      <button id="reset" type="submit" name="forgetPassword" formnovalidate>Forget Password</butto>
-    </div>
+  var Login = document.getElementById("Register");
+  
+  Login.addEventListener("click", function(event) {
+    event.preventDefault()
+    window.location.href = "login.html";
+  });
 
-  </div>
- 
-</form>
 
-</body>
-</html>
+    </script>

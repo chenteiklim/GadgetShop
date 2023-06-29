@@ -16,6 +16,7 @@ if ($conn->connect_error) {
 
 session_start();
 $email = $_SESSION['email'];
+$order_id=$_SESSION['order_id'];
 
 $selectNameQuery = "SELECT name FROM users WHERE email = '$email'";
 // Execute the query
@@ -49,7 +50,7 @@ if ($result2->num_rows > 0) {
     $user_id = $row['user_id'];
 }
 mysqli_select_db($conn, $dbname);
-$maxIdQuery = "SELECT MAX(id) AS max_id FROM user_{$user_id}";
+$maxIdQuery = "SELECT MAX(id) AS max_id FROM cart{$order_id}";
 $maxIdResult = $conn->query($maxIdQuery);
 
 if ($maxIdResult && $maxIdResult->num_rows > 0) {
@@ -58,7 +59,7 @@ if ($maxIdResult && $maxIdResult->num_rows > 0) {
 }
 
 // Query to retrieve all rows in ascending order
-$selectRowsQuery = "SELECT * FROM user_$user_id ORDER BY id ASC";
+$selectRowsQuery = "SELECT * FROM cart$order_id ORDER BY id ASC";
 $selectRowsResult = $conn->query($selectRowsQuery);
 
 $rows = []; // Initialize an empty array to store the rows
@@ -86,12 +87,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['product_id'])) {
     $result = $conn->query($sql);
     
     // Redirect the user back to the current page after deletion
-    header("Location: confirm2.php");
+    header("Location: cart.php");
     exit;
 }
 
 // Query to count the total number of rows in the table
-$countQuery = "SELECT COUNT(*) AS total FROM user_$user_id";
+$countQuery = "SELECT COUNT(*) AS total FROM cart$order_id";
 $countResult = $conn->query($countQuery);
 
 if ($countResult && $countResult->num_rows > 0) {
@@ -321,7 +322,7 @@ button {
 
 
 <div id="navContainer"> 
-<form action="homepage.php" method="POST">
+<form action="mainpage.php" method="POST">
     <!-- Your form fields here -->
     <button class="button"><?php echo 'Shopping Cart'; ?></button>
     <button class="button"><?php echo 'Notification' ?></button>
@@ -362,8 +363,8 @@ button {
 <?php
 $grandTotal=0;
 // Loop through the orders
-for ($order_id = 1; $order_id <= $maxId ; $order_id++) {
-    $selectRowQuery = "SELECT * FROM user_$user_id WHERE id = $order_id";
+for ($item_id = 1; $item_id <= $maxId ; $item_id++) {
+    $selectRowQuery = "SELECT * FROM cart$order_id WHERE id = $item_id";
     $selectRowResult = $conn->query($selectRowQuery);
 
     if ($selectRowResult && $selectRowResult->num_rows > 0) {

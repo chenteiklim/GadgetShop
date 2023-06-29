@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    
+    <div id="container">
+        <div>
+            <img class="keyboard" src="php echo $image; " alt="">
+        </div>
+        <div>
+            <div class="names">product_name </div>
+            
+
+
+            <div id="status-' . 0 . '" class="status">php echo $status.'sold'></div>
+        </div>
+        <div id="price-<?php echo 0; ?>" class="prices"><?php echo'RM'.$price; ?></div>
+        <form action="order.php?product_id=1" method="post">
+            <div class="quantity">
+                <label for="quantity" class="quantity_label">Quantity:</label>
+                <div id="messageContainer"></div>
+                <button id="increment">+</button>
+                <input type="number" id="quantity_input" name="quantity_input" min="1" value="1">
+                <button id="decrement">-</button>
+            </div>
+            <div class="buyBtn">
+                <div>
+                    <input id="addCartButton" class="button" type="submit" name="addCart" value="Add To Cart">
+                </div>
+                <div>
+                    <input id="buyNowButton" class="button" type="submit" name="addOrder" value="Buy Now">
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+</body>
+</html>

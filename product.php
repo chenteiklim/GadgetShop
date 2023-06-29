@@ -38,8 +38,6 @@ if ($result->num_rows > 0) {
     $image= $row['image'];
 
     $status = $row['status'];
-
-    $rating = $row['rating'];
 }
 
 
@@ -48,7 +46,7 @@ if ($result->num_rows > 0) {
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <link rel="icon" href="img/logo.jpg" type="image/jpg">
+  <link rel="icon" href="logo.jpg" type="image/jpg">
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -60,11 +58,8 @@ if ($result->num_rows > 0) {
 </head>
 <body>
 
-
-
   <div id="navContainer"> 
     <button id="Cart" class="button">Shopping Cart</button>
-    <button class="button">Notification</button>
     <button class="button"><?php echo $name ?></button>
     <button id="logOut" class="button">Log-out</button>
     <button id="back" class="button">Back</button>
@@ -116,6 +111,12 @@ if ($result->num_rows > 0) {
     padding-top: 5px;
     padding-bottom: 5px;
     font-size: 14px;
+    }
+
+    #status{
+      margin-left:50px;
+      margin-top:30px;
+      font-size:18px;
     }
 
     
@@ -184,25 +185,11 @@ if ($result->num_rows > 0) {
         </div>
         <div>
             <div class="names"><?php echo $product_name; ?> </div>
-            <div id="rating">
-
-<?php
-for ($i = 1; $i <= $rating; $i++) {
-?>
-  <span class="fa fa-star checked"></span>
-<?php
-}
-
-for ($i = $rating + 1; $i <= 5; $i++) {
-?>
-    <span class="fa fa-star"></span>
-    <?php
-}
-?>
+            
 
 
-            <div id="status-' . 0 . '" class="status"><?php echo $status.'sold' ; ?></div>
-        </div>
+            <div id="status" class="status"><?php echo $status.'sold' ; ?></div>
+        
         <div id="price-<?php echo 0; ?>" class="prices"><?php echo'RM'.$price; ?></div>
         <form action="order.php?product_id=1" method="post">
             <div class="quantity">
@@ -219,12 +206,15 @@ for ($i = $rating + 1; $i <= 5; $i++) {
                 <div>
                     <input id="buyNowButton" class="button" type="submit" name="addOrder" value="Buy Now">
                 </div>
+
             </div>
         </form>
+        <div id="messageContainer2"></div>
+        <div id="messageContainer3"></div>
+
+  </div>
     </div>
 </div>
-
-<script src="confirm.js"></script>
 
 <script>
 const quantity_input=document.getElementById('quantity_input');  
@@ -248,27 +238,64 @@ decrementButton.addEventListener('click', function(event) {
     }
 })
 
-  document.getElementById("addCartButton").addEventListener("click", function(event) {
-    // Prevent the default form submission
-    event.preventDefault();
 
-    var messageContainer = document.getElementById("messageContainer");
-    messageContainer.textContent = "Added to cart successfully!";
-    messageContainer.style.display = "block";
-    messageContainer.classList.add("message-container");
-    setTimeout(function() {
-        messageContainer.style.display = "none";
-      }, 2000);
-  });
+var logOutButton = document.getElementById("logOut");
+
+logOutButton.addEventListener("click", function() {
+  // Perform the navigation action here
+  window.location.href = "login.html";
+});
+
   document.getElementById("Cart").addEventListener("click", function() {
-    window.location.href = "confirm2.php";
+    window.location.href = "cart.php";
+  });
+
+  document.getElementById("buyNowButton").addEventListener("click", function(event) {
+    event.preventDefault();
+    window.location.href = "cart.php";
   });
 
   document.getElementById('back').addEventListener('click', function(e) {
     e.preventDefault();
-    window.location.href = 'homepage.php';
+    window.location.href = 'mainpage.php';
   })
 
+  window.onload = function() {
+    var urlParams = new URLSearchParams(window.location.search);
+    var message = urlParams.get('message');
+    var message3 = urlParams.get('message3');
+    
+    if (message) {
+        var messageContainer = document.getElementById("messageContainer");
+        messageContainer.textContent = message;
+        messageContainer.style.display = "block";
+        messageContainer.classList.add("message-container");
+        setTimeout(function() {
+            messageContainer.style.display = "none";
+        }, 3000);
+    }
+     
+    if (message3) {
+        var messageContainer3 = document.getElementById("messageContainer3");
+        messageContainer3.textContent = message;
+        messageContainer3.style.display = "block";
+        messageContainer3.classList.add("message-container");
+        setTimeout(function() {
+            messageContainer3.style.display = "none";
+        }, 3000);
+    }
+    
+    if (urlParams.get("redirect") === "true") {
+        var messageContainer2 = document.getElementById("messageContainer2");
+        messageContainer2.textContent = "Your cart is empty";
+        messageContainer2.style.display = "block";
+        messageContainer2.classList.add("message-container");
+        setTimeout(function() {
+            messageContainer2.style.display = "none";
+        }, 3000);
+    }
+};
+  
   
 </script>
 
