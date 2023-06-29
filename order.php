@@ -20,39 +20,33 @@ if (isset($_POST['addCart'])) {
     echo($product_id);
     mysqli_select_db($conn, $dbname);
 
-    if (!isset($_SESSION['order_id'])) {
-        // Retrieve the max order_id from the database
-        $sql = "SELECT MAX(order_id) AS max_order_id FROM orders WHERE email = '$email'";
-        $result = $conn->query($sql);
-    
-        // Check if there are any rows returned
-        if ($result->num_rows > 0) {
-            // Fetch the row from the result
-            $row = $result->fetch_assoc();
-            
-            // Access the max_order_id value and increment it by 1
-            $order_id = $row['max_order_id'] + 1;
-        } else {
-            // If no rows returned, set the initial order_id to 1
-            $order_id = 1;
-        }
-        
-        // Store the order_id in the session variable
-        $_SESSION['order_id'] = $order_id;
-    } 
-    else {
-        // If order_id is already set in the session, retrieve it
-        $order_id = $_SESSION['order_id'];
+if (!isset($_SESSION['order_id'])) {
+    $maxIdQuery = "SELECT MAX(order_id) AS max_id FROM orders WHERE email= '$email'";
+    $maxIdResult = $conn->query($maxIdQuery);
+
+    if ($maxIdResult->num_rows > 0) {
+        $row= $maxIdResult->fetch_assoc();
+    $order_id = $row['max_id'] + 1;
+    $_SESSION['order_id'] = $order_id;
+    echo $order_id;
     }
+
+}
+else{
+    $maxIdQuery = "SELECT MAX(order_id) AS max_id FROM orders WHERE email= '$email'";
+    $maxIdResult = $conn->query($maxIdQuery);
+
+    if ($maxIdResult->num_rows > 0) {
+        $row2= $maxIdResult->fetch_assoc();
+    $order_id = $row2['max_id'];
+    echo $order_id;
+    }
+}
     
-
-
-
-
 
     $sql = "SELECT user_id FROM users WHERE email = '$email'";
     $result = $conn->query($sql);
-
+    
     
     if ($result->num_rows > 0) {
         // Fetch the user ID from the result

@@ -14,7 +14,7 @@ if ($conn->connect_error) {
 
 session_start();
 $email = $_SESSION['email'];
-$order_id=$_SESSION['order_id'];
+
 
 
 $sql = "SELECT user_id FROM users WHERE email = '$email'";
@@ -26,20 +26,14 @@ if ($result->num_rows > 0) {
     $user_id = $row['user_id'];
 }
 mysqli_select_db($conn, $dbname);
-try {
-    $maxIdQuery = "SELECT MAX(id) AS max_id FROM cart{$order_id}";
-    $maxIdResult = $conn->query($maxIdQuery);
 
-    if ($maxIdResult->num_rows > 0) {
-        $row9 = $maxIdResult->fetch_assoc();
-        $maxId = $row9['max_id'];
-    } else {
-        // Table exists but no rows found
-        $maxId = 0;
-    }
-} catch (Exception $e) {
-    // Table doesn't exist, set $maxId to an appropriate initial value
-    $maxId = 0;
+$maxIdQuery = "SELECT MAX(order_id) AS max_id FROM orders WHERE email= '$email'";
+$maxIdResult = $conn->query($maxIdQuery);
+
+if ($maxIdResult->num_rows > 0) {
+    $row= $maxIdResult->fetch_assoc();
+$order_id = $row['max_id'];
+$_SESSION['order_id'] = $order_id;
 }
 
     // Query to retrieve all rows in ascending order

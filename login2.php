@@ -21,6 +21,7 @@ $order_id = $_SESSION['order_id'];
 
 
 if (isset($_POST['submit'])) {
+  
   $clickDate = date("Y-m-d");
   
   // Format the date in the desired format "Y-m-d"
@@ -29,7 +30,10 @@ if (isset($_POST['submit'])) {
   $_SESSION['email'] = $email;
   $password = $_POST['password'];
 
-  mysqli_select_db($conn, $dbname); 
+  mysqli_select_db($conn, $dbname);
+  $sql_delete_cart = "DELETE FROM cart$order_id WHERE email = '$email'";
+  $conn->query($sql_delete_cart);
+   
   $sql = "SELECT * FROM users WHERE email = '$email' AND password = '$password'";
   $result = $conn->query($sql);
   if ($result->num_rows > 0) {
