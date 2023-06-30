@@ -361,10 +361,12 @@ if ($selectNumberResult && $selectNumberResult->num_rows > 0) {
 $total_rows = count($rows);
 
 
+$date = date('Y-m-d');
 
+if (isset($_GET['date'])) {
+    $date = $_GET['date']; // Update $date with the value from the URL parameter
+}
 
-
-$date = $_GET['date'];
 
 
 
@@ -486,6 +488,7 @@ var query_date = document.getElementById("query_date");
 
 query_date.addEventListener("click", function() {
   // Perform the navigation action here
+  
   window.location.href = "date.php";
 });
 </script>
