@@ -101,6 +101,10 @@ if ($result->num_rows > 0) {
     #edit{
         margin-top:20px;
     }
+    #admin{
+        margin-top:20px;
+    }
+    
     #sales{
         margin-top:20px;
     }
@@ -123,8 +127,11 @@ if ($result->num_rows > 0) {
     <div class="edit">
     <button id="edit" class="button"><?php echo 'Edit Product' ?></button>
     </div>
-    <div class="delete">
-    <button id="sales" class="button"><?php echo 'Sales' ?></button>
+    <div class="admin">
+    <button id="admin" class="button"><?php echo 'Sales' ?></button>
+    </div>
+    <div class="sales">
+    <button id="sales" class="button"><?php echo 'Daily sales' ?></button>
     </div>
 </div>
  
@@ -149,12 +156,18 @@ edit.addEventListener("click", function() {
   window.location.href = "editProduct.php";
 });
 
-var sales= document.getElementById("sales");
-sales.addEventListener("click", function() {
+var admin= document.getElementById("admin");
+admin.addEventListener("click", function() {
   // Perform the navigation action here
   window.location.href = "sales.php";
 });
 
+
+var sales= document.getElementById("sales");
+sales.addEventListener("click", function() {
+  // Perform the navigation action here
+  window.location.href = "dailySales.php";
+});
 </script>
 
   

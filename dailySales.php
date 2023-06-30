@@ -217,6 +217,18 @@ button {
     padding-bottom: 10px;
     font-size: 16px;
     }
+
+    #query_date {
+    background-color: black;
+    color: white;
+    cursor: pointer;
+    margin-left: 20px;
+    padding-left: 30px;
+    padding-right: 30px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    font-size: 16px;
+    }
     
     button:active {
       transform: scale(0.9);
@@ -329,6 +341,7 @@ button {
     <div class="total_price"><?php echo 'Total Price'; ?></div>
     <div class="order_status"><?php echo 'Order Status'; ?></div>
     <div class="purchase_date"><?php echo 'Purchase date'; ?></div>
+    <button id="query_date"><?php echo 'Date'; ?> </button>
 </div>
 
 <?php
@@ -351,11 +364,14 @@ $total_rows = count($rows);
 
 
 
+$date = $_GET['date'];
+
+
 
 $grandTotal=0;
 // Loop through the orders
 for ($order_id = 1; $order_id <= $maxId; $order_id++) {
-    $selectRowQuery = "SELECT * FROM orders WHERE order_id = $order_id";
+    $selectRowQuery = "SELECT * FROM orders WHERE order_id = $order_id AND date='$date'";
     $selectRowResult = $conn->query($selectRowQuery);
 
     if ($selectRowResult && $selectRowResult->num_rows > 0) {
@@ -464,6 +480,14 @@ for ($order_id = 1; $order_id <= $maxId; $order_id++) {
     }
   });
   }
+
+  
+var query_date = document.getElementById("query_date");
+
+query_date.addEventListener("click", function() {
+  // Perform the navigation action here
+  window.location.href = "date.php";
+});
 </script>
 </div>
 
