@@ -13,9 +13,8 @@ if ($conn->connect_error) {
 }
 
 session_start();
-$email=$_SESSION['email'];
 mysqli_select_db($conn, $dbname);
-$selectNameQuery = "SELECT name FROM admin WHERE email = '$email'";
+$selectNameQuery = "SELECT name FROM admin";
 // Execute the query
 $result = $conn->query($selectNameQuery);
 
@@ -112,7 +111,7 @@ if ($result->num_rows > 0) {
 
     <!-- Your form fields here -->
     <input type="hidden" name="data" value="<?php echo $_SESSION['data']; ?>">
-    <button class="button"><?php echo 'Notification' ?></button>
+    <button class="button"><?php echo $name ?></button>
     <button id="logOut" class="button"><?php echo 'Log Out' ?></button>
 
 </div>

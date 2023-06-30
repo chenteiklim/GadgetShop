@@ -15,22 +15,10 @@ if ($conn->connect_error) {
 
 
 session_start();
-$email = $_SESSION['email'];
-$order_id=$_SESSION['order_id'];
 
-$selectNameQuery = "SELECT name FROM users WHERE email = '$email'";
-// Execute the query
-$result = $conn->query($selectNameQuery);
-
-if ($result->num_rows > 0) {
-    // Fetch the row from the result
-    $row = $result->fetch_assoc();
-}
-// Get the address value from the fetched row
-$name = $row['name'];
 
 mysqli_select_db($conn, $dbname);
-$sql = "SELECT address,contact FROM users WHERE email = '$email'";
+$sql = "SELECT address,contact FROM users";
 $result = $conn->query($sql);
 
 if ($result->num_rows > 0) {
@@ -41,7 +29,7 @@ if ($result->num_rows > 0) {
 }
 
 
-$sql2 = "SELECT user_id FROM users WHERE email = '$email'";
+$sql2 = "SELECT user_id FROM users";
 $result2 = $conn->query($sql2);
 
 if ($result2->num_rows > 0) {
@@ -94,7 +82,7 @@ if ($countResult && $countResult->num_rows > 0) {
     $total_rows = 0;
 }
 
-$selectNameQuery = "SELECT name FROM users WHERE email = '$email'";
+$selectNameQuery = "SELECT name FROM users";
 // Execute the query
 $result = $conn->query($selectNameQuery);
 
@@ -120,8 +108,7 @@ body{
 }
 
 #container {
-
-width:1200px;
+width:1500px;
 background-color: #CDCDCD;
 display: flex;
 flex-direction:column;
@@ -131,18 +118,21 @@ height: 100%;
 }
 
 .item{
+    margin-left:20px;
  width:100px;
  height:100px;
 }
 
 .title{
+    margin-left:40px;
+
     display: grid;
-    grid-template-columns: repeat(6, 1fr);
-    width:800px;
-    grid-gap: 10px;
+    grid-template-columns: repeat(13, 1fr);
+    width:1400px;
+    grid-gap: 3px;
     margin-top: 50px;
     margin-bottom:40px;
-    font-size:20px;
+    font-size:18px;
    
 }
 .total_price{
@@ -150,11 +140,13 @@ height: 100%;
     color:red;
 }
 .content{
-    width:800px;
-    font-size:20px;
+    margin-left:40px;
+
+    width:1400px;
+    font-size:16px;
     display: grid;
-    grid-template-columns: repeat(6, 1fr);
-    grid-gap: 10px;
+    grid-template-columns: repeat(13, 1fr);
+    grid-gap: 3px;
     align-items:center;
     margin-bottom: 50px;
     
@@ -168,31 +160,27 @@ height: 100%;
 
 .product_name {
     text-align:center;
-    font-size:20px;
     color: black;
 }
 
 .price {
     text-align:center;
-    font-size: 20px;
     color: red;
 }
 
 .quantity {
     text-align:center;
-    font-size: 20px;
 }
 
 #prices{
     text-align:center;
-    font-size:30px;
     color:red;
 }
 #checkOut{
     background-color:white;
     display:flex;
     font-size: 20px;
-    width:1200px;
+    width:1500px;
     margin-top:480px;
     height:400px;
     position: fixed;
@@ -236,16 +224,16 @@ button {
     }
     
     body{
+        font-size:12px;
         display:flex;
-        align-items:center;
         background-color: bisque;
-        width: 1400px;
-        height: 1400px;
+        align-items:center;
+        height: 1500px;
     }
       
     
     #navContainer{
-        width:1200px;
+        width:1500px;
         background-color: black;
     }
     
@@ -314,7 +302,7 @@ button {
 
 
 <div id="navContainer"> 
-<form action="mainpage.php" method="POST">
+<form action="adminHomepage.php" method="POST">
     <button id="logOut" class="button"><?php echo 'Log Out' ?></button>
         <button type="submit" class="back-button">Home</button>
 </form>  
@@ -324,28 +312,22 @@ button {
 <div id="container">
     <div class='item10'>
     <div class='user-info'>
-        <div class='title2'>
-            Delivery Address
-        </div>
-        <div class='content2'>
-            <div class='address'>
-                <?php echo $name;?>
-            </div>
-            <div class='address'>
-                <?php echo $contact;?>
-            </div>
-            <div class='address'>
-                <?php echo $address;?>
-            </div>   
+        
         </div>
     </div>
 
 <div class='title'>
+    <div class="Order_id"><?php echo 'Order_id'; ?></div>
+    <div class="User_id"><?php echo 'User_id'; ?></div>
+    <div class="Name"><?php echo 'Name'; ?> </div>
+    <div class="Contact"><?php echo 'Contact'; ?> </div>
+    <div class="Address"><?php echo 'Address'; ?> </div>
     <div class="Product"><?php echo 'Product'; ?> </div>
     <div class="product_name"><?php echo 'Product Name'; ?></div>
     <div class="price"><?php echo 'Price'; ?></div>
     <div class="quantity"><?php echo 'Quantity'; ?></div>
     <div class="total_price"><?php echo 'Total Price'; ?></div>
+    <div class="order_status"><?php echo 'Order Status'; ?></div>
 </div>
 
 <?php
@@ -361,20 +343,34 @@ for ($order_id = 1; $order_id <= $maxId; $order_id++) {
         while ($row = $selectRowResult->fetch_assoc()) {
             $product_id = $row['product_id'];
             $product_name = $row['product_name'];
+            $user_id=$row['user_id'];
             $name = $row['name'];
             $address = $row['address'];
             $price = $row['price'];
             $image = $row['image'];
             $quantity = $row['quantity'];
+            $order_status = $row['order_status'];
             $total_price = $row['total_price'];
             $grandTotal += $total_price;
         ?>
             <div class="content">
+            <div id="order_id"><?php echo $order_id;?></div>
+            <div id="user_id"><?php echo $user_id; ?></div>
+            <div id="name"><?php echo $name;?></div>
+            <div id="Contact"><?php echo $contact;?></div>
+            <div id="Address"><?php echo $address;?></div>
             <img class="item" src="<?php echo $image; ?>" alt="">
             <div class="product_name"><?php echo $product_name; ?></div>
             <div id="price"><?php echo 'RM'.$price; ?></div>
             <div id="quantity">x<?php echo $quantity; ?></div>
             <div id="total_price"><?php echo 'RM'.$total_price; ?></div> 
+            <div id="order_status"><?php echo $order_status?></div> 
+            <form action="editOrder.php" method="POST">
+                <input type="hidden" name="order_id" value="<?php echo $order_id; ?>">
+                <input type="hidden" name="order_status" value="<?php echo $order_status; ?>">
+                <input type="hidden" name="user_id" value="<?php echo $user_id; ?>">
+                <button type="submit">Edit</button>
+            </form>
             </div>
         <?php
         }
