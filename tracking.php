@@ -4,213 +4,482 @@ $username = "root";
 $password = "";
 $dbname = "gadgetShop";
 
-$conn = new mysqli($servername, $username, $password);
+// Create a new connection
+$conn = new mysqli($servername, $username, $password, $dbname);
 
+// Check the connection
 if ($conn->connect_error) {
-  die("Connection failed: " . $conn->connect_error);
+    die("Connection failed: " . $conn->connect_error);
 }
+
+
+
+session_start();
+$email=$_SESSION['email'];
 
 mysqli_select_db($conn, $dbname);
-$selectOrderQuery = "SELECT user_id, order_id, name, email, address, contact, date FROM orders";
-$result = $conn->query($selectOrderQuery);
+$sql = "SELECT address,contact FROM users WHERE email='$email'";
+$result = $conn->query($sql);
 
 if ($result->num_rows > 0) {
-  while ($row = $result->fetch_assoc()) {
-    $user_id = $row['user_id'];
-    $order_id = $row['order_id'];
-    $name = $row['name'];
-    $email = $row['email'];
+    // Fetch the user ID from the result
+    $row = $result->fetch_assoc();
     $address = $row['address'];
     $contact = $row['contact'];
-    $clickDate = $row['date'];
-    $shippingDate = date('Y-m-d', strtotime($clickDate . '+1 day'));
-    $deliveryDate = date('Y-m-d', strtotime($clickDate . '+4 days')); // 1 day for shipping + 3 days for delivery
-  }
-}
-else {
-    // No orders found, redirect to mainpage.php
-    $message = "Your order is empty.";
-    // Append the message as a parameter to the URL
-    header("Location: mainpage.php?message=" . urlencode($message));
-    exit();
 }
 
 
+
+mysqli_select_db($conn, $dbname);
+$maxIdQuery = "SELECT MAX(order_id) AS max_id FROM orders WHERE email='$email'";
+$maxIdResult = $conn->query($maxIdQuery);
+
+if ($maxIdResult && $maxIdResult->num_rows > 0) {
+    $row9 = $maxIdResult->fetch_assoc();
+    $maxId = $row9['max_id'];
+}
+
+// Query to retrieve all rows in ascending order
+$selectRowsQuery = "SELECT * FROM orders WHERE email='$email' ORDER BY order_id ASC";
+$selectRowsResult = $conn->query($selectRowsQuery);
+
+$rows = []; // Initialize an empty array to store the rows
+
+if ($selectRowsResult && $selectRowsResult->num_rows > 0) {
+    while ($row = $selectRowsResult->fetch_assoc()) {
+        $rows[] = $row; // Add each row to the array
+    }
+}
+
+// Loop through the array of rows
+foreach ($rows as $row) {
+    $product_id = $row['product_id'];
+    $product_name = $row['product_name'];
+    $name = $row['name'];
+    $address = $row['address'];
+    $price = $row['price'];
+    $image = $row['image'];
+    $quantity=$row['quantity'];
+    $total_price=$row['total_price'];
+}
+
+
+// Query to count the total number of rows in the table
+$countQuery = "SELECT COUNT(*) AS total FROM orders WHERE email='$email'";
+$countResult = $conn->query($countQuery);
+
+if ($countResult && $countResult->num_rows > 0) {
+    $row6 = $countResult->fetch_assoc();
+    $total_rows = $row6['total'];
+} else {
+    $total_rows = 0;
+}
+
+$selectNameQuery = "SELECT name FROM users WHERE email='$email'";
+// Execute the query
+$result = $conn->query($selectNameQuery);
+
+if ($result->num_rows > 0) {
+    // Fetch the row from the result
+    $row = $result->fetch_assoc();
+}
+    // Get the address value from the fetched row
+    $name = $row['name'];
+
+    
 
 
 ?>
 
-
-
-
-
-<!DOCTYPE html>
-<html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-    <link rel="stylesheet" href="tracking.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
-
-    <script src="script.js" defer></script>
     <style>
-        /* CSS for tracking elements */
+
 body{
-    background-color:bisque;
-}
-.container{
-    margin-top:100px;
-    margin-left:100px;
-    display:flex;
-    justify-content:center;
-    background-color:white;
-    width:800px;
-    height:200px;
-}
-.row{
-    margin-right:100px;
-    margin-top:20px;
     display: flex;
-    width: 400px;
-}/* CSS for tracking elements */
-.order-tracking {
-    text-align: center;
-    width: 33.33%;
-    position: relative;
-    display: block;
+    flex-direction:column;
+
 }
-#navContainer{
-    display:flex;
-    justify-content:center;
+
+#container {
+width:1500px;
+background-color: #CDCDCD;
+display: flex;
+flex-direction:column;
+height: 100%;
+
+ 
+}
+
+.item{
+    margin-left:20px;
+ width:100px;
+ height:100px;
+}
+
+.title{
+    margin-left:40px;
+
+    display: grid;
+    grid-template-columns: repeat(13, 1fr);
+    width:1400px;
+    grid-gap: 3px;
+    margin-top: 50px;
+    margin-bottom:40px;
+    font-size:18px;
+   
+}
+.total_price{
+    text-align:center;
+    color:red;
+}
+.content{
+    margin-left:40px;
+
+    width:1400px;
+    font-size:16px;
+    display: grid;
+    grid-template-columns: repeat(13, 1fr);
+    grid-gap: 3px;
     align-items:center;
-        width:1400px;
-        height:60px;
-        background-color: black;
-    }
-.order-tracking .is-complete {
-    display: block;
-    position: relative;
-    border-radius: 50%;
-    height: 30px;
-    width: 30px;
-    border: 0px solid #AFAFAF;
-    background-color: #f7be16;
-    margin: 0 auto;
-    transition: background 0.25s linear;
-    -webkit-transition: background 0.25s linear;
-    z-index: 2;
+    margin-bottom: 50px;
+    
+
 }
 
-.order-tracking.completed .is-complete {
-    border-color: #27aa80;
-    border-width: 0px;
-    background-color: #27aa80;
+.Product{
+    font-size:20px;
+    text-align:center;
 }
 
-.order-tracking.completed .is-complete::before {
-    content: "\f00c";
-    display: block;
-    position: absolute;
-    font-family: "Font Awesome 5 Free";
-    font-weight: 900;
-    font-size: 16px;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    color: #fff;
+.product_name {
+    text-align:center;
+    color: black;
 }
 
-.order-tracking p {
-    color: #A4A4A4;
-    font-size: 16px;
-    margin-top: 8px;
-    margin-bottom: 0;
-    line-height: 20px;
+.price {
+    text-align:center;
+    color: red;
 }
 
-.order-tracking p span {
-    font-size: 14px;
+.quantity {
+    text-align:center;
 }
 
-.order-tracking::before {
-    content: '';
-    display: block;
-    height: 3px;
-    width: calc(100% - 40px);
-    background-color: #f7be16;
-    top: 13px;
-    position: absolute;
-    left: calc(-50% + 20px);
-    z-index: 0;
+#prices{
+    text-align:center;
+    color:red;
+}
+#checkOut{
+    background-color:white;
+    display:flex;
+    font-size: 20px;
+    width:1500px;
+    margin-top:480px;
+    height:400px;
+    position: fixed;
 }
 
-.order-tracking:first-child:before {
-    display: none;
+
+#total_item{
+    padding-left:10px;
+}
+#price{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    
 }
 
-.order-tracking.completed:before {
-    background-color: #27aa80;
+#total_price{
+    text-align:center;
 }
 
-#back {
-    margin-left:800px;
+#quantity{
+    text-align:center;
+}
+
+
+button {
     background-color: black;
     color: white;
     cursor: pointer;
+    margin-left: 20px;
     padding-left: 30px;
     padding-right: 30px;
     padding-top: 10px;
     padding-bottom: 10px;
     font-size: 16px;
     }
+    
     button:active {
       transform: scale(0.9);
       background: radial-gradient( circle farthest-corner at 10% 20%,  rgba(255,94,247,1) 17.8%, rgba(2,245,255,1) 100.2% );
     }
     
-#logOut{
-    margin-left: 200px;
-}
+    body{
+        font-size:12px;
+        display:flex;
+        background-color: bisque;
+        align-items:center;
+        height: 1500px;
+    }
+      
+    
+    #navContainer{
+        width:1500px;
+        background-color: black;
+    }
+    
+    #logOut{
+        margin-left: 200px;
+    }
+
+    .total{
+        margin-left:800px;
+    }
+
+    .user-info{
+        display:flex;
+        flex-direction:column;
+    }
+    .title2{
+        margin-top:20px;
+        font-size:22px;
+        color:red;
+        margin-right:500px;
+    }
+
+    .content2{
+        margin-top:10px;
+        font-size:18px;
+        margin-right:200px;
+        display:flex;
+    }
+
+    .address{
+        margin-right:20px;
+    }
+
+    .item10{
+        margin-left:100px
+    }
+
+    .row{
+        margin-top:10px;
+        display:flex;
+    }
+
+    .row2{
+        margin-left:20px;
+    }
+    .row3{
+        margin-left:82px;
+    }
+    .row4{
+        margin-left:78px;
+    }
+    .text{
+        margin-top:30px;
+        margin-left:600px;
+    }
+    #checkOutbtn{
+        margin-top:20px;
+        margin-left:50px;
+    }
+
+    .payment{
+        margin-left:100px;
+    }
+
+    #bigTitle{
+        font-size:28px;
+        margin-top:20px;
+        margin-left:40px;
+    }
+
+    #toggle{
+        margin-left:100px;
+        margin-top:100px;
+        height:50px;
+    }
+
+    #paymentForm{
+        margin-left:100px;
+        margin-top:100px;
+    }
+
+    #text1{
+        margin-left:100;
+        margin-top:100px;
+    }
+    #text2{
+        margin-left:100px;
+        margin-top:20px;
+    }
     </style>
 </head>
-<body>
+
+
 <div id="navContainer"> 
+<form action="mainpage.php" method="POST">
+        <button type="submit" class="back-button">Home</button>
+</form>  
 
-<!-- Your form fields here -->
-<button id="back" class="button"><?php echo 'Back' ?></button>
-
+  
 </div>
 <div id="container">
-    <div class="container">
-        <div class="row">
-            <div class="col-12 col-md-10 hh-grayBox pt45 pb20">
-                <div class="row justify-content-between">
-                    <div class="order-tracking" id="order1">
-                        <span class="is-complete"></span>
-                        <p>Ordered<br><span><?php echo $clickDate ?></span></p>
-                    </div>
-                    <div class="order-tracking" id="order2">
-                        <span class="is-complete"></span>
-                        <p>Shipped<br><span><?php echo $shippingDate ?></span></p>
-                    </div>
-                    <div class="order-tracking" id="order3">
-                        <span class="is-complete"></span>
-                        <p>Delivered<br><span><?php echo $deliveryDate ?></span></p>
-                    </div>
-                </div>
-            </div>
+    <div class='item10'>
+    <div class='user-info'>
+        
         </div>
     </div>
-</body>
-</html>
+<div id="bigTitle">Order Status</div>
 
+<div class='title'>
+    <div class="Order_id"><?php echo 'Order_id'; ?></div>
+    <div class="User_id"><?php echo 'User_id'; ?></div>
+    <div class="Name"><?php echo 'Name'; ?> </div>
+    <div class="Contact"><?php echo 'Contact'; ?> </div>
+    <div class="Address"><?php echo 'Address'; ?> </div>
+    <div class="Product"><?php echo 'Product'; ?> </div>
+    <div class="product_name"><?php echo 'Product Name'; ?></div>
+    <div class="price"><?php echo 'Price'; ?></div>
+    <div class="quantity"><?php echo 'Quantity'; ?></div>
+    <div class="total_price"><?php echo 'Total Price'; ?></div>
+    <div class="order_status"><?php echo 'Order Status'; ?></div>
+    <div class="purchase_date"><?php echo 'Purchase date'; ?></div>
+</div>
+
+<?php
+
+$selectNumberRows = "SELECT * FROM orders WHERE email='$email' ORDER BY order_id ASC";
+$selectNumberResult = $conn->query($selectRowsQuery);
+
+$rows = []; // Initialize an empty array to store the rows
+
+if ($selectNumberResult && $selectNumberResult->num_rows > 0) {
+    while ($row = $selectNumberResult->fetch_assoc()) {
+        $rows[] = $row; // Add each row to the array
+    }
+}
+
+// Get the total number of rows
+$total_rows = count($rows);
+
+
+
+
+
+
+
+$grandTotal=0;
+// Loop through the orders
+for ($order_id = 1; $order_id <= $maxId; $order_id++) {
+    $selectRowQuery = "SELECT * FROM orders WHERE order_id = $order_id AND email='$email'";
+    $selectRowResult = $conn->query($selectRowQuery);
+
+    if ($selectRowResult && $selectRowResult->num_rows > 0) {
+        // Display order details
+        while ($row = $selectRowResult->fetch_assoc()) {
+            $product_id = $row['product_id'];
+            $product_name = $row['product_name'];
+            $user_id=$row['user_id'];
+            $name = $row['name'];
+            $date = $row['date'];
+            $address = $row['address'];
+            $price = $row['price'];
+            $image = $row['image'];
+            $quantity = $row['quantity'];
+            $order_status = $row['order_status'];
+            $total_price = $row['total_price'];
+            $grandTotal += $total_price;
+
+            
+        ?>
+            <div class="content">
+            <div id="order_id"><?php echo $order_id;?></div>
+            <div id="user_id"><?php echo $user_id; ?></div>
+            <div id="name"><?php echo $name;?></div>
+            <div id="Contact"><?php echo $contact;?></div>
+            <div id="Address"><?php echo $address;?></div>
+            <img class="item" src="<?php echo $image; ?>" alt="">
+            <div class="product_name"><?php echo $product_name; ?></div>
+            <div id="price"><?php echo 'RM'.$price; ?></div>
+            <div id="quantity">x<?php echo $quantity; ?></div>
+            <div id="total_price"><?php echo 'RM'.$total_price; ?></div> 
+            <div id="order_status"><?php echo $order_status?></div> 
+            <div id="order_date"><?php echo $date?></div> 
+            </div>
+        
+        <?php
+        }
+    }
+}
+?>
+
+</div>
+
+<div id="checkOut">
+    <div>
+        <div id="text1">Note: <span style="color: red;">Delivered</span>  means your parcel is arrived </div>
+        <div id="text2"><span style="color: blue;">Purchase</span>  or <span style="color: blue;">Shipping</span>  means your order is pending, please wait.</div>
+    </div>
+    <form id="paymentForm" action="payment.php" method="POST">
+        <div class="row">
+            <div>
+                Merchandise Subtotal
+            </div>
+            <div class='row2'>
+                <?php echo "RM $grandTotal"?>
+            </div>
+        </div>
+        <div class="row">
+            <div>
+                Shipping total
+            </div>
+            <div class='row3'>
+                <?php
+                    $shippingPrice = 9 * $total_rows;
+                    echo "RM" . $shippingPrice;
+                ?>
+            </div>
+        </div>
+        <?php
+            $Total=$grandTotal+$shippingPrice;
+        ?>
+        <div class='row'>
+            <div>
+                Total Payment
+            </div>
+        <div class='row4'>
+            <?php echo "RM $Total"?>
+        </div>
+    </form>  
+</div>
+   
+   <button id="toggle" onclick="toggleContent()">Toggle Content</button>
 <script>
-var back = document.getElementById("back");
-
-back.addEventListener("click", function() {
-  // Perform the navigation action here
-  window.location.href = "mainpage.php";
-});
-
+  function toggleContent() {
+    var content = document.getElementById('checkOut');
+    if (content.style.opacity === '0') {
+      content.style.opacity = '1';
+    } else {
+      content.style.opacity = '0';
+    }
+  
+    document.addEventListener('click', function(event) {
+    var checkOut = document.getElementById('checkOut');
+    var checkOutBtn = document.getElementById('checkOutbtn');
+    if (event.target !== checkOut && event.target !== checkOutBtn && !checkOut.contains(event.target)) {
+      checkOut.style.display = 'none';
+    }
+  });
+  }
 </script>
+</div>
+
+<div class='payment'>
+     Payment Method
+     <button id="checkOutbtn" class="button"><?php echo 'Online Banking' ?></button>
+</div>
+</div>
