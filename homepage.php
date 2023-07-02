@@ -172,6 +172,20 @@ session_start();
   width:50px;
   height:50px;
   }
+  .message-container {
+      
+      background-color: rgba(0, 0, 0, 0.7);
+      position: fixed;
+      padding-left: 120px;
+      padding-right: 120px;
+      padding-top: 90px;
+      padding-bottom: 90px;
+      color: white;
+      font-size: 30px;
+      display: flex;
+    align-items: center;
+    justify-content: center;
+    }
 
 
   
@@ -184,6 +198,8 @@ session_start();
     <button id="login" class="button"><?php echo 'Log in' ?></button>
     <button id='seller' class='button'><?php echo 'seller center' ?></button>
 </div>
+<div id="messageContainer"></div>
+
 <div id="container">
 
     <?php
@@ -245,34 +261,5 @@ session_start();
 }
 ?>
 </div>
+<script src="homepage.js"></script>
 
-<script>
-  const registerButton = document.getElementById('register');
-
-// Add an event listener to the button
-registerButton.addEventListener('click', function() {
-  // Code to navigate to another page goes here
-  // For example, you can use the window.location.href property to redirect to a new URL
-  window.location.href = 'register.html';
-});
-
-
-const loginButton = document.getElementById('login');
-
-// Add an event listener to the button
-loginButton.addEventListener('click', function() {
-  // Code to navigate to another page goes here
-  // For example, you can use the window.location.href property to redirect to a new URL
-  window.location.href = 'login.html';
-});
-
-const sellerButton = document.getElementById('seller');
-
-// Add an event listener to the button
-sellerButton.addEventListener('click', function() {
-  // Code to navigate to another page goes here
-  // For example, you can use the window.location.href property to redirect to a new URL
-  window.location.href = 'sellerLogin.html';
-});
-
-</script>

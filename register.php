@@ -9,6 +9,11 @@ $conn = new mysqli($servername, $Username, $Password);
 if ($conn->connect_error) {
   die("Connection failed: " . $conn->connect_error);
 }
+
+if (isset($_GET['success']) && $_GET['success'] == 5) {
+  echo "<div class='message-container'>Registration successful!</div>";
+}
+
 session_start();
 if (isset($_POST['submit'])) {
   $username = $_POST['username'];
@@ -57,7 +62,7 @@ if (isset($_POST['submit'])) {
     $insertUserQuery = "INSERT INTO users (name, address, email, password, contact) VALUES ('$username', '$address', '$email', '$password', '$contact')";
     if ($conn->query($insertUserQuery) === true) 
     {
-      header("Location: login.html?success=5");
+      header("Location: homepage.php?success=5");
       exit();
     }
   }

@@ -35,7 +35,7 @@ if (isset($_POST['submit'])) {
 
   else {
       // email doesn't exist, display an error message
-      echo "Invalid email or password. Please try again.";
+      header("Location: login.html?success=5");
   }
   
 }

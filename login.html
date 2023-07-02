@@ -80,6 +80,24 @@ span.psw {
         font-size: 30px;
       }
     
+  .message-container {
+      
+      background-color: rgba(0, 0, 0, 0.7);
+      position: fixed;
+      margin-left: 500px;
+      padding-left: 120px;
+      padding-right: 120px;
+      padding-top: 90px;
+      padding-bottom: 90px;
+      color: white;
+      font-size: 30px;
+      display: flex;
+    align-items: center;
+    justify-content: center;
+    }
+
+
+    
 
 
 /* Change styles for span and cancel button on extra small screens */
@@ -112,7 +130,8 @@ span.psw {
 </div>
 <div id="container">
   <form action="login.php" method="post">
-  
+    <div id="messageContainer"></div>
+
     <div class="container">
     
       <label for="email"><b>Email</b></label>
@@ -120,7 +139,20 @@ span.psw {
       <div id="emailContainer"></div>
 
       <label for="password"><b>Password</b></label>
-      <input type="password" placeholder="Enter Password" name="password" required>
+      <input type="password" id="password" placeholder="Enter Password" name="password" required>
+      <button id="togglePassword">Toggle Password Visibility</button>
+      <script>
+        const togglePasswordBtn = document.getElementById('togglePassword');
+        const passwordInput = document.getElementById('password');
+      
+        togglePasswordBtn.addEventListener('click', function() {
+          if (passwordInput.type === 'password') {
+            passwordInput.type = 'text';
+          } else {
+            passwordInput.type = 'password';
+          }
+        });
+      </script>
       <div id="passwordContainer"></div>
 
       <input id="login" class="button" type="submit" name="submit" value="Login">
@@ -131,6 +163,7 @@ span.psw {
   
     </body>
       </html>
+      <script src="login.js"></script>
     <script>
   var home = document.getElementById("home");
   
