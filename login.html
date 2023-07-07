@@ -96,6 +96,11 @@ span.psw {
     justify-content: center;
     }
 
+    #login{
+  margin-top: 20px; 
+  }
+
+
 
     
 
@@ -145,7 +150,8 @@ span.psw {
         const togglePasswordBtn = document.getElementById('togglePassword');
         const passwordInput = document.getElementById('password');
       
-        togglePasswordBtn.addEventListener('click', function() {
+        togglePasswordBtn.addEventListener('click', function(event) {
+          event.preventDefault()
           if (passwordInput.type === 'password') {
             passwordInput.type = 'text';
           } else {
@@ -156,7 +162,9 @@ span.psw {
       <div id="passwordContainer"></div>
 
       <input id="login" class="button" type="submit" name="submit" value="Login">
-  
+      <div>
+        <button id="reset" class="button" type="submit" name="forgetPassword" formnovalidate>Forget Password</butto>
+      </div>
   </form>
   
 </div>

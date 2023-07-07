@@ -58,7 +58,7 @@ if (isset($_POST['emailConfirmation'])) {
             $mail->Host = 'smtp.office365.com';
             $mail->SMTPAuth = true;
             $mail->Username = 'chenteik_99@hotmail.com';
-            $mail->Password = '12183teik88';
+            $mail->Password = 'wizard12183';
             $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
             $mail->Port = 587;
 

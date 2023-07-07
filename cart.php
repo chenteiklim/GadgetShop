@@ -37,7 +37,7 @@ $_SESSION['order_id'] = $order_id;
 }
 
     // Query to retrieve all rows in ascending order
-    $selectRowsQuery = "SELECT * FROM cart$order_id ORDER BY id ASC";
+    $selectRowsQuery = "SELECT * FROM cart$order_id WHERE email='$email' ORDER BY id ASC";
     $selectRowsResult = $conn->query($selectRowsQuery);
 
     $rows = []; // Initialize an empty array to store the rows
@@ -69,10 +69,16 @@ $_SESSION['order_id'] = $order_id;
         $stmt->bind_param("s", $product_id_to_delete);
         $stmt->execute();
         $stmt->close();
+        $newOrderIdQuery = "SELECT MAX(order_id) AS max_id FROM orders WHERE email = '$email'";
+        $newOrderIdResult = $conn->query($newOrderIdQuery);
         
+        if ($newOrderIdResult && $newOrderIdResult->num_rows > 0) {
+            $row = $newOrderIdResult->fetch_assoc();
+            $_SESSION['order_id'] = $row['max_id'];
+        }        
     }
     // Query to retrieve all rows in ascending order
-    $selectRowsQuery = "SELECT * FROM cart$order_id ORDER BY id ASC";
+    $selectRowsQuery = "SELECT * FROM cart$order_id  WHERE email='$email' ORDER BY id ASC";
     $selectRowsResult = $conn->query($selectRowsQuery);
 
     $rows = []; // Initialize an empty array to store the rows
@@ -111,7 +117,7 @@ if (empty($rows)) {
 
 
 // Query to count the total number of rows in the table
-$countQuery = "SELECT COUNT(*) AS total FROM cart$order_id";
+$countQuery = "SELECT COUNT(*) AS total FROM cart$order_id WHERE email='$email'";
 $countResult = $conn->query($countQuery);
 
 if ($countResult && $countResult->num_rows > 0) {
@@ -165,9 +171,9 @@ foreach ($rows as $row) {
         $quantities[$product_id] = $quantity;
     
 ?>  
-<div class="content">
+<div class="content" id="row_<?php echo $product_id; ?>">
     <img class="item" src="<?php echo $image; ?>" alt="">
-    <div class="product_name"><?php echo $product_name; ?></div>
+    <div class="product_name"><?php echo $order_id; ?></div>
     <div id="price"><?php echo 'RM'.$price; ?></div>
     <div id="quantity">x<?php echo $quantity; ?></div>
     <div id="total_price"><?php echo 'RM'.$total_price; ?></div>

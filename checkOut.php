@@ -17,7 +17,7 @@ if ($conn->connect_error) {
 session_start();
 $email = $_SESSION['email'];
 $order_id=$_SESSION['order_id'];
-
+echo $order_id;
 $selectNameQuery = "SELECT name FROM users WHERE email = '$email'";
 // Execute the query
 $result = $conn->query($selectNameQuery);
@@ -78,6 +78,7 @@ foreach ($rows as $row) {
     $address = $row['address'];
     $price = $row['price'];
     $image = $row['image'];
+
 }
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['product_id'])) {
@@ -341,7 +342,7 @@ button {
         </div>
         <div class='content2'>
             <div class='address'>
-                <?php echo $name;?>
+                <?php echo $order_id; ?>
             </div>
             <div class='address'>
                 <?php echo $contact;?>
