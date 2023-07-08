@@ -50,13 +50,16 @@ if ($result2->num_rows > 0) {
     $user_id = $row['user_id'];
 }
 mysqli_select_db($conn, $dbname);
-$maxIdQuery = "SELECT MAX(id) AS max_id FROM cart{$order_id}";
-$maxIdResult = $conn->query($maxIdQuery);
+$countQuery = "SELECT COUNT(*) AS total FROM cart$order_id";
+$countResult = $conn->query($countQuery);
 
-if ($maxIdResult && $maxIdResult->num_rows > 0) {
-    $row9 = $maxIdResult->fetch_assoc();
-    $maxId = $row9['max_id'];
+if ($countResult && $countResult->num_rows > 0) {
+    $row = $countResult->fetch_assoc();
+    $maxId = $row['total'];
+} else {
+    $maxId = 0;
 }
+
 
 // Query to retrieve all rows in ascending order
 $selectRowsQuery = "SELECT * FROM cart$order_id ORDER BY id ASC";
@@ -78,6 +81,8 @@ foreach ($rows as $row) {
     $address = $row['address'];
     $price = $row['price'];
     $image = $row['image'];
+    $quantity=$row['quantity'];
+    $total_price=$row['total_price'];
 
 }
 
@@ -327,7 +332,7 @@ button {
     <!-- Your form fields here -->
     <button class="button"><?php echo 'Shopping Cart'; ?></button>
     <button class="button"><?php echo 'Notification' ?></button>
-    <button class="button"><?php echo $name;?></button>
+    <button class="button"><?php echo $total_rows;?></button>
     <button id="logOut" class="button"><?php echo 'Log Out' ?></button>
         <button type="submit" class="back-button">Home</button>
 </form>  
@@ -379,6 +384,8 @@ for ($item_id = 1; $item_id <= $maxId ; $item_id++) {
         $quantity = $row['quantity'];
         $total_price=$row['total_price'];
         $grandTotal += $total_price;
+        echo "Max ID: $maxId<br>";
+        echo "Loop count: $item_id<br>";
     }
 ?>  
 <div class="content">

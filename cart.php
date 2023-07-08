@@ -68,13 +68,27 @@ $_SESSION['order_id'] = $order_id;
         $stmt = $conn->prepare("DELETE FROM cart$order_id WHERE product_id = ?");
         $stmt->bind_param("s", $product_id_to_delete);
         $stmt->execute();
+        
+
+        if ($stmt->execute()) {
+            // Deletion successful
+        } else {
+            // Error occurred
+            echo "Error: " . $stmt->error;
+        }
         $stmt->close();
+
         $newOrderIdQuery = "SELECT MAX(order_id) AS max_id FROM orders WHERE email = '$email'";
         $newOrderIdResult = $conn->query($newOrderIdQuery);
         
         if ($newOrderIdResult && $newOrderIdResult->num_rows > 0) {
             $row = $newOrderIdResult->fetch_assoc();
-            $_SESSION['order_id'] = $row['max_id'];
+            $new_order_id = $row['max_id'];
+            // Delete the record from the orders table for the specific product
+            $deleteOrderQuery = "DELETE FROM orders WHERE email = '$email' AND order_id = '$new_order_id' AND product_id = '$product_id_to_delete'";
+            $conn->query($deleteOrderQuery);
+            $_SESSION['order_id'] = $new_order_id;
+            
         }        
     }
     // Query to retrieve all rows in ascending order
