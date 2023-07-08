@@ -356,7 +356,7 @@ button {
 
 <?php
 
-$selectNumberRows = "SELECT * FROM orders WHERE email='$email' ORDER BY order_id ASC";
+$selectNumberRows = "SELECT * FROM orders WHERE email='$email' AND order_status <> 'cart' ORDER BY order_id ASC";
 $selectNumberResult = $conn->query($selectRowsQuery);
 
 $rows = []; // Initialize an empty array to store the rows
@@ -379,7 +379,7 @@ $total_rows = count($rows);
 $grandTotal=0;
 // Loop through the orders
 for ($order_id = 1; $order_id <= $maxId; $order_id++) {
-    $selectRowQuery = "SELECT * FROM orders WHERE order_id = $order_id AND email='$email'";
+    $selectRowQuery = "SELECT * FROM orders WHERE order_id = $order_id AND email='$email' AND order_status <> 'cart'";
     $selectRowResult = $conn->query($selectRowQuery);
 
     if ($selectRowResult && $selectRowResult->num_rows > 0) {
@@ -397,7 +397,7 @@ for ($order_id = 1; $order_id <= $maxId; $order_id++) {
             $order_status = $row['order_status'];
             $total_price = $row['total_price'];
             $grandTotal += $total_price;
-
+            $button_id = $product_id;
             
         ?>
             <div class="content">
@@ -413,6 +413,9 @@ for ($order_id = 1; $order_id <= $maxId; $order_id++) {
             <div id="total_price"><?php echo 'RM'.$total_price; ?></div> 
             <div id="order_status"><?php echo $order_status?></div> 
             <div id="order_date"><?php echo $date?></div> 
+            <form action="" method="post">
+                <button class="button" type="submit" name="refund" value="<?php echo $button_id ?>">refund</button>
+            </form>
             </div>
         
         <?php
@@ -451,3 +454,29 @@ for ($order_id = 1; $order_id <= $maxId; $order_id++) {
      <button id="checkOutbtn" class="button"><?php echo 'Online Banking' ?></button>
 </div>
 </div>
+
+
+<?php
+  if (isset($_POST['refund'])) {
+    $product3_id = $_POST['refund'];
+
+    // Use the $product2_id variable as needed
+    // For example, you can store it in a session variable
+    $_SESSION['product3_id'] = $product3_id;
+    
+    if (isset($_SESSION['product3_id'])) {
+      // Product ID is saved in the session
+      $product3_id = $_SESSION['product3_id'];
+      
+   echo '<script>window.location.href = "request.php";</script>';
+   
+  } 
+  
+  else {
+      // Product ID is not saved in the session
+      echo "Product ID not found in the session.";
+  }
+
+    exit;
+}
+?>

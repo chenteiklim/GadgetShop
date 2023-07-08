@@ -15,7 +15,7 @@ if ($conn->connect_error) {
 session_start();
 $email=$_SESSION['email'];
 $order_id=$_SESSION['order_id'];
-echo $order_id;
+
 mysqli_select_db($conn, $dbname);
 $selectNameQuery = "SELECT name FROM users WHERE email = '$email'";
 // Execute the query
@@ -28,7 +28,8 @@ if ($result->num_rows > 0) {
     // Get the address value from the fetched row
     $name = $row['name'];
 
-    mysqli_select_db($conn, $dbname);
+    
+
     $maxIdQuery = "SELECT MAX(product_id) AS max_id FROM products";
     $maxIdResult = $conn->query($maxIdQuery);
     
@@ -48,6 +49,8 @@ if ($result->num_rows > 0) {
             $rows[] = $row; // Add each row to the array
         }
     }
+    
+  
   ?>
 <head>
 <meta charset="UTF-8">
@@ -233,16 +236,23 @@ if ($result->num_rows > 0) {
 <div id="container">
 
     <?php
+   
     $productHTML = '';
 
       // Loop through the array of rows
       foreach ($rows as $index => $row) {
+        $disableButton = ''; 
           $product_id = $row['product_id'];
           $product_name = $row['product_name'];
           $price = $row['price'];
           $image = $row['image'];
           $stock=$row['stock'];
           $status=$row['status'];
+          $soldStatus = $status . " sold";
+          if ($status == 100) {
+            $soldStatus='out of stock';
+            $disableButton = 'disabled'; // Add this line
+          }
           $button_id = $product_id;
 
           $newProduct2 = '
@@ -257,10 +267,9 @@ if ($result->num_rows > 0) {
                 <div>' . $price . '</div>
               </div>
           
-            <div class="status">' . $status . ' sold</div>
+            <div class="status">' . $soldStatus . '</div>
             <form action="" method="post">
-            <button class="button" type="submit" name="view" value="' . $button_id . '">View</button>
-            </form>
+            <button class="button" type="submit" name="view" value="' . $button_id . '" ' . $disableButton . '>View</button>            </form>
            
           </div>
           </div>
@@ -291,6 +300,9 @@ if ($result->num_rows > 0) {
 
     exit;
 }
+
+
+
 ?>
 <script>
 var logOutButton = document.getElementById("logOut");
@@ -312,7 +324,7 @@ var refund = document.getElementById("refund");
 
 refund.addEventListener("click", function() {
   // Perform the navigation action here
-  window.location.href = "refund.php";
+  window.location.href = "receipt.php";
 });
 
 
