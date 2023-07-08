@@ -177,8 +177,6 @@ height: 100%;
     margin-top:480px;
     height:400px;
     position: fixed;
-    z-index: 1; /* Add this line */
-
 }
 
 
@@ -298,13 +296,17 @@ button {
         margin-top:20px;
         margin-left:40px;
     }
-
+    
+    #bigTitle2{
+        font-size:20px;
+        margin-top:20px;
+        margin-left:40px;
+        color:blue;
+    }
     #toggle{
-        position: fixed; /* Change this line */
-        left:1400px;
-        bottom:80px;
+        margin-left:100px;
+        margin-top:100px;
         height:50px;
-        z-index:99;
     }
 
     #paymentForm{
@@ -335,9 +337,11 @@ button {
     <div class='item10'>
     <div class='user-info'>
         
+        </div>
     </div>
-    </div>
-<div id="bigTitle">Order Status</div>
+<div id="bigTitle">We are sorry for your dissatisfaction of our products.</div>
+<div id="bigTitle2">Please select product you want to refund.</div>
+
 
 <div class='title'>
     <div class="Order_id"><?php echo 'Order_id'; ?></div>
@@ -397,6 +401,9 @@ for ($order_id = 1; $order_id <= $maxId; $order_id++) {
             $order_status = $row['order_status'];
             $total_price = $row['total_price'];
             $grandTotal += $total_price;
+            $button_id = $product_id;
+            echo $button_id;
+
 
             
         ?>
@@ -413,6 +420,9 @@ for ($order_id = 1; $order_id <= $maxId; $order_id++) {
             <div id="total_price"><?php echo 'RM'.$total_price; ?></div> 
             <div id="order_status"><?php echo $order_status?></div> 
             <div id="order_date"><?php echo $date?></div> 
+            <form action="" method="post">
+                <button class="button" type="submit" name="refund" value="<?php echo $button_id ?>">refund</button>
+            </form>
             </div>
         
         <?php
@@ -422,28 +432,6 @@ for ($order_id = 1; $order_id <= $maxId; $order_id++) {
 ?>
 
 </div>
-
-<div id="checkOut">
-    <div id="textArea">
-        <div id="text1">Note: <span style="color: red;">Delivered</span>  means your parcel is arrived </div>
-        <div id="text2"><span style="color: blue;">Purchase</span>  or <span style="color: blue;">Shipping</span>  means your order is pending, please wait.</div>
-    </div>    
-</div>
-<div>
-    <button id="toggle" onclick="toggleContent()">Toggle Content</button>
-</div>
-   
-<script>
-  function toggleContent() {
-    var content = document.getElementById('checkOut');
-    if (content.style.opacity === '0') {
-      content.style.opacity = '1';
-    } else {
-      content.style.opacity = '0';
-    }
-
-  }
-</script>
 </div>
 
 <div class='payment'>
@@ -451,3 +439,28 @@ for ($order_id = 1; $order_id <= $maxId; $order_id++) {
      <button id="checkOutbtn" class="button"><?php echo 'Online Banking' ?></button>
 </div>
 </div>
+
+<?php
+  if (isset($_POST['refund'])) {
+    $product3_id = $_POST['refund'];
+
+    // Use the $product2_id variable as needed
+    // For example, you can store it in a session variable
+    $_SESSION['product3_id'] = $product3_id;
+    
+    if (isset($_SESSION['product3_id'])) {
+      // Product ID is saved in the session
+      $product3_id = $_SESSION['product3_id'];
+      
+   echo '<script>window.location.href = "request.php";</script>';
+   
+  } 
+  
+  else {
+      // Product ID is not saved in the session
+      echo "Product ID not found in the session.";
+  }
+
+    exit;
+}
+?>

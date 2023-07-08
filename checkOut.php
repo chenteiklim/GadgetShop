@@ -17,7 +17,6 @@ if ($conn->connect_error) {
 session_start();
 $email = $_SESSION['email'];
 $order_id=$_SESSION['order_id'];
-echo $order_id;
 $selectNameQuery = "SELECT name FROM users WHERE email = '$email'";
 // Execute the query
 $result = $conn->query($selectNameQuery);
@@ -49,56 +48,9 @@ if ($result2->num_rows > 0) {
     $row = $result2->fetch_assoc();
     $user_id = $row['user_id'];
 }
-mysqli_select_db($conn, $dbname);
-$countQuery = "SELECT COUNT(*) AS total FROM cart$order_id";
-$countResult = $conn->query($countQuery);
-
-if ($countResult && $countResult->num_rows > 0) {
-    $row = $countResult->fetch_assoc();
-    $maxId = $row['total'];
-} else {
-    $maxId = 0;
-}
-
-
-// Query to retrieve all rows in ascending order
-$selectRowsQuery = "SELECT * FROM cart$order_id ORDER BY id ASC";
-$selectRowsResult = $conn->query($selectRowsQuery);
-
-$rows = []; // Initialize an empty array to store the rows
-
-if ($selectRowsResult && $selectRowsResult->num_rows > 0) {
-    while ($row = $selectRowsResult->fetch_assoc()) {
-        $rows[] = $row; // Add each row to the array
-    }
-}
-
-// Loop through the array of rows
-foreach ($rows as $row) {
-    $product_id = $row['product_id'];
-    $product_name = $row['product_name'];
-    $name = $row['name'];
-    $address = $row['address'];
-    $price = $row['price'];
-    $image = $row['image'];
-    $quantity=$row['quantity'];
-    $total_price=$row['total_price'];
-
-}
-
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['product_id'])) {
-    
-    // Delete the record from the database
-    $sql = "DELETE FROM user_$user_id WHERE product_id = '$product_id'";
-    $result = $conn->query($sql);
-    
-    // Redirect the user back to the current page after deletion
-    header("Location: cart.php");
-    exit;
-}
 
 // Query to count the total number of rows in the table
-$countQuery = "SELECT COUNT(*) AS total FROM cart$order_id";
+$countQuery = "SELECT COUNT(*) AS total FROM cart$order_id WHERE email='$email' ORDER BY user_id ASC";
 $countResult = $conn->query($countQuery);
 
 if ($countResult && $countResult->num_rows > 0) {
@@ -332,7 +284,7 @@ button {
     <!-- Your form fields here -->
     <button class="button"><?php echo 'Shopping Cart'; ?></button>
     <button class="button"><?php echo 'Notification' ?></button>
-    <button class="button"><?php echo $total_rows;?></button>
+    <button class="button"><?php echo $name;?></button>
     <button id="logOut" class="button"><?php echo 'Log Out' ?></button>
         <button type="submit" class="back-button">Home</button>
 </form>  
@@ -367,26 +319,54 @@ button {
 </div>
 
 <?php
+
+mysqli_select_db($conn, $dbname);
+$selectRowQuery1 = "SELECT * FROM cart$order_id WHERE email='$email' ORDER BY user_id ASC";
+$selectResult = $conn->query($selectRowQuery1);
+
+if ($selectResult && $selectResult->num_rows > 0) {
+    $product_ids = array(); // Initialize an empty array
+
+    while ($row2 = $selectResult->fetch_assoc()) {
+        $product_ids[] = $row2['product_id']; // Add each product_id to the array
+        echo $row2['product_id'];
+    }
+}
+
+$grandTotal = 0;
+$total_rows = count($product_ids);
+echo $total_rows;
+
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['product_id'])) {
+    
+    // Delete the record from the database
+    $sql = "DELETE FROM user_$user_id WHERE product_id = '$product_id'";
+    $result = $conn->query($sql);
+    
+    // Redirect the user back to the current page after deletion
+    header("Location: cart.php");
+    exit;
+}
+
 $grandTotal=0;
 // Loop through the orders
-for ($item_id = 1; $item_id <= $maxId ; $item_id++) {
-    $selectRowQuery = "SELECT * FROM cart$order_id WHERE id = $item_id";
+
+foreach ($product_ids as $product_id) {
+    $selectRowQuery = "SELECT * FROM cart$order_id WHERE product_id = $product_id AND email='$email' ORDER BY user_id ASC";
     $selectRowResult = $conn->query($selectRowQuery);
 
     if ($selectRowResult && $selectRowResult->num_rows > 0) {
         $row = $selectRowResult->fetch_assoc();
-        $product_id = $row['product_id'];
         $product_name = $row['product_name'];
         $name = $row['name'];
         $address = $row['address'];
         $price = $row['price'];
         $image = $row['image'];
         $quantity = $row['quantity'];
-        $total_price=$row['total_price'];
+        $total_price = $row['total_price'];
         $grandTotal += $total_price;
-        echo "Max ID: $maxId<br>";
-        echo "Loop count: $item_id<br>";
-    }
+
 ?>  
 <div class="content">
     <img class="item" src="<?php echo $image; ?>" alt="">
@@ -398,6 +378,7 @@ for ($item_id = 1; $item_id <= $maxId ; $item_id++) {
 
 <?php
 $Total=$grandTotal+9;
+    }
 }
 ?>
  </div>

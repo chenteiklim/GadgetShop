@@ -14,6 +14,8 @@ if ($conn->connect_error) {
 
 session_start();
 $email=$_SESSION['email'];
+$order_id=$_SESSION['order_id'];
+echo $order_id;
 mysqli_select_db($conn, $dbname);
 $selectNameQuery = "SELECT name FROM users WHERE email = '$email'";
 // Execute the query
@@ -178,6 +180,9 @@ if ($result->num_rows > 0) {
     height: 20px;
 }
 
+#refund{
+  margin-top:10px;
+}
 
 
 .checked{
@@ -219,6 +224,7 @@ if ($result->num_rows > 0) {
     <input type="hidden" name="data" value="<?php echo $_SESSION['data']; ?>">
     <button class="button" onclick="window.location.href = 'cart.php';"><?php echo 'Shopping Cart'; ?></button>
     <button class="button" id="tracking"><?php echo 'Tracking' ?></button>
+    <button class="button" id="refund" type="submit" name="refund" value="">refund</button>
     <button class="button"><?php echo $name ?></button>
     <button id="logOut" class="button"><?php echo 'Log Out' ?></button>
     <div id="messageContainer"></div>
@@ -299,6 +305,14 @@ var tracking = document.getElementById("tracking");
 tracking.addEventListener("click", function() {
   // Perform the navigation action here
   window.location.href = "tracking.php";
+});
+
+
+var refund = document.getElementById("refund");
+
+refund.addEventListener("click", function() {
+  // Perform the navigation action here
+  window.location.href = "refund.php";
 });
 
 

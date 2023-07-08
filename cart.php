@@ -29,12 +29,12 @@ mysqli_select_db($conn, $dbname);
 
 $maxIdQuery = "SELECT MAX(order_id) AS max_id FROM orders WHERE email= '$email'";
 $maxIdResult = $conn->query($maxIdQuery);
+$row= $maxIdResult->fetch_assoc();
+if ($row['max_id'] !== null) {
+    
+    $order_id = $row['max_id'];
+    $_SESSION['order_id'] = $order_id;
 
-if ($maxIdResult->num_rows > 0) {
-    $row= $maxIdResult->fetch_assoc();
-$order_id = $row['max_id'];
-$_SESSION['order_id'] = $order_id;
-}
 
     // Query to retrieve all rows in ascending order
     $selectRowsQuery = "SELECT * FROM cart$order_id WHERE email='$email' ORDER BY id ASC";
@@ -91,6 +91,9 @@ $_SESSION['order_id'] = $order_id;
             
         }        
     }
+}
+
+if (!empty($order_id)) {
     // Query to retrieve all rows in ascending order
     $selectRowsQuery = "SELECT * FROM cart$order_id  WHERE email='$email' ORDER BY id ASC";
     $selectRowsResult = $conn->query($selectRowsQuery);
@@ -104,11 +107,18 @@ $_SESSION['order_id'] = $order_id;
     }
 
 
-if (empty($rows)) {
+    if (empty($rows)) {
+        $message = "Your cart is empty.";
+        // Append the message as a parameter to the URL
+        header("Location: mainpage.php?message=" . urlencode($message));
+        exit; // Terminate the script after the redirect
+    }
+}
+else{
     $message = "Your cart is empty.";
-    // Append the message as a parameter to the URL
-    header("Location: product.php?message=" . urlencode($message));
-    exit; // Terminate the script after the redirect
+        // Append the message as a parameter to the URL
+        header("Location: mainpage.php?message=" . urlencode($message));
+        exit; // Terminate the script after the redirect
 }
 
 ?>
