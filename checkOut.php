@@ -50,7 +50,7 @@ if ($result2->num_rows > 0) {
 }
 
 // Query to count the total number of rows in the table
-$countQuery = "SELECT COUNT(*) AS total FROM cart$order_id WHERE email='$email' ORDER BY user_id ASC";
+$countQuery = "SELECT COUNT(*) AS total FROM cart" . $order_id . "_" . $user_id . "  WHERE email='$email' ORDER BY user_id ASC";
 $countResult = $conn->query($countQuery);
 
 if ($countResult && $countResult->num_rows > 0) {
@@ -299,7 +299,7 @@ button {
         </div>
         <div class='content2'>
             <div class='address'>
-                <?php echo $order_id; ?>
+                <?php echo "order_id:" . $order_id; ?>
             </div>
             <div class='address'>
                 <?php echo $contact;?>
@@ -321,7 +321,7 @@ button {
 <?php
 
 mysqli_select_db($conn, $dbname);
-$selectRowQuery1 = "SELECT * FROM cart$order_id WHERE email='$email' ORDER BY user_id ASC";
+$selectRowQuery1 = "SELECT * FROM cart" . $order_id . "_" . $user_id . "  WHERE email='$email' ORDER BY user_id ASC";
 $selectResult = $conn->query($selectRowQuery1);
 
 if ($selectResult && $selectResult->num_rows > 0) {
@@ -329,13 +329,11 @@ if ($selectResult && $selectResult->num_rows > 0) {
 
     while ($row2 = $selectResult->fetch_assoc()) {
         $product_ids[] = $row2['product_id']; // Add each product_id to the array
-        echo $row2['product_id'];
     }
 }
 
 $grandTotal = 0;
 $total_rows = count($product_ids);
-echo $total_rows;
 
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['product_id'])) {
@@ -353,7 +351,7 @@ $grandTotal=0;
 // Loop through the orders
 
 foreach ($product_ids as $product_id) {
-    $selectRowQuery = "SELECT * FROM cart$order_id WHERE product_id = $product_id AND email='$email' ORDER BY user_id ASC";
+    $selectRowQuery = "SELECT * FROM cart" . $order_id . "_" . $user_id . "  WHERE product_id = $product_id AND email='$email' ORDER BY user_id ASC";
     $selectRowResult = $conn->query($selectRowQuery);
 
     if ($selectRowResult && $selectRowResult->num_rows > 0) {

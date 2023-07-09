@@ -11,19 +11,36 @@ if ($conn->connect_error) {
 }
 
 if(isset($_POST['forgetPassword'])) {
-    header("Location: verify.html");
-    exit(); 
-  }
+  header("Location: verify.html");
+  exit(); 
+}
+
 session_start();
+$email=$_SESSION['email'];
 $product_ids = $_SESSION['product_ids'];
 $order_id = $_SESSION['order_id'];
+
+$sql = "SELECT user_id FROM users WHERE email = '$email'";
+
+$result = $conn->query($sql);
+
+if ($result && $result->num_rows > 0) {
+    $row = $result->fetch_assoc();
+    $user_id = $row['user_id'];
+    echo "User ID: " . $user_id;
+} else {
+    echo "User not found.";
+}
+
+
+
+
+
 
 
 
 if (isset($_POST['submit'])) {
-  
   $clickDate = date("Y-m-d");
-  
   // Format the date in the desired format "Y-m-d"
   $formattedDate = date("Y-m-d", strtotime($clickDate));
   $email=$_POST['email'];
@@ -31,9 +48,9 @@ if (isset($_POST['submit'])) {
   $password = $_POST['password'];
 
   mysqli_select_db($conn, $dbname);
-  $sql_delete_cart = "DELETE FROM cart$order_id WHERE email = '$email'";
+  $sql_delete_cart = "DELETE FROM cart" . $order_id . "_" . $user_id . "  WHERE email = '$email'";
   $conn->query($sql_delete_cart);
-   
+
   $sql = "SELECT * FROM users WHERE email = '$email' AND password = '$password'";
   $result = $conn->query($sql);
   if ($result->num_rows > 0) {
@@ -47,19 +64,19 @@ if (isset($_POST['submit'])) {
     
     if ($result->num_rows > 0) {
         // email exists and password exists, proceed with the login
-        $_SESSION['order_id']=$order_id;
-        echo($order_id);
-    }
+       
         $sql = "UPDATE orders SET order_status = 'purchased', date = '$formattedDate' WHERE order_id = $order_id";
-          // Execute query
-          if ($conn->query($sql) === true) {
-              echo "Row updated successfully.";
-          } 
+        $sql9 = "UPDATE adminorders SET order_status = 'purchased' WHERE order_id = $order_id";
+        // Execute query
+        if ($conn->query($sql) === true) {
+            echo "Row updated successfully.";
+        } 
+        if ($conn->query($sql9) === true) {
+          echo "Row updated in adminorders table successfully.";
+        }
 
-  
         $product_ids_str = implode(',', $product_ids);
         $quantities = $_SESSION['quantities'];
-
         $sql_select = "SELECT product_id, stock,status FROM products WHERE product_id IN ($product_ids_str)";
 
         // Execute the query
@@ -67,9 +84,7 @@ if (isset($_POST['submit'])) {
 
         // Check if the query was successful
         $statuses = array();
-
-       
-         
+ 
     // Fetch the rows from the result
     while ($row = $result->fetch_assoc()) {
       $product_id = $row['product_id'];
@@ -94,8 +109,9 @@ if (isset($_POST['submit'])) {
   if ($stmt->affected_rows > 0) {
       $orders_id = $order_id + 1;
       $_SESSION['orders_id'] = $orders_id;
+      echo $orders_id;
       header("Location: success.html");
-    }  
+  }  
       
   } 
     else {
@@ -104,4 +120,5 @@ if (isset($_POST['submit'])) {
     }
     
   }
+}
 ?>

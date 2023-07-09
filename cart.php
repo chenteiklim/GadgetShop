@@ -37,7 +37,7 @@ if ($row['max_id'] !== null) {
 
 
     // Query to retrieve all rows in ascending order
-    $selectRowsQuery = "SELECT * FROM cart$order_id WHERE email='$email' ORDER BY id ASC";
+    $selectRowsQuery = "SELECT * FROM cart" . $order_id . "_" . $user_id . " WHERE email='$email' ORDER BY id ASC";
     $selectRowsResult = $conn->query($selectRowsQuery);
 
     $rows = []; // Initialize an empty array to store the rows
@@ -65,7 +65,7 @@ if ($row['max_id'] !== null) {
         $product_id_to_delete = $_POST['product_id'];
 
         // Delete the record from the database
-        $stmt = $conn->prepare("DELETE FROM cart$order_id WHERE product_id = ?");
+        $stmt = $conn->prepare("DELETE FROM cart" . $order_id . "_" . $user_id . "  WHERE product_id = ?");
         $stmt->bind_param("s", $product_id_to_delete);
         $stmt->execute();
         
@@ -95,7 +95,7 @@ if ($row['max_id'] !== null) {
 
 if (!empty($order_id)) {
     // Query to retrieve all rows in ascending order
-    $selectRowsQuery = "SELECT * FROM cart$order_id  WHERE email='$email' ORDER BY id ASC";
+    $selectRowsQuery = "SELECT * FROM cart" . $order_id . "_" . $user_id . "   WHERE email='$email' ORDER BY id ASC";
     $selectRowsResult = $conn->query($selectRowsQuery);
 
     $rows = []; // Initialize an empty array to store the rows
@@ -141,7 +141,7 @@ else{
 
 
 // Query to count the total number of rows in the table
-$countQuery = "SELECT COUNT(*) AS total FROM cart$order_id WHERE email='$email'";
+$countQuery = "SELECT COUNT(*) AS total FROM cart" . $order_id . "_" . $user_id . "  WHERE email='$email'";
 $countResult = $conn->query($countQuery);
 
 if ($countResult && $countResult->num_rows > 0) {

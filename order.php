@@ -9,56 +9,53 @@ $conn = new mysqli($servername, $username, $password);
 if ($conn->connect_error) {
   die("Connection failed: " . $conn->connect_error);
 }
+mysqli_select_db($conn, $dbname);
 
 if (isset($_POST['addCart'])) {
     session_start();
     $email = $_SESSION['email'];
     $product_id = $_SESSION['product_id'];
-    $clickDate = date("Y-m-d");
-  // Format the date in the desired format "Y-m-d"
-  $formattedDate = date("Y-m-d", strtotime($clickDate));
-    echo($product_id);
-    mysqli_select_db($conn, $dbname);
 
-if (!isset($_SESSION['order_id'])) {
-    $maxIdQuery = "SELECT MAX(order_id) AS max_id FROM orders WHERE email= '$email'";
-    $maxIdResult = $conn->query($maxIdQuery);
-
-    if ($maxIdResult->num_rows > 0) {
-        $row= $maxIdResult->fetch_assoc();
-    $order_id = $row['max_id'] + 1;
-    $_SESSION['order_id'] = $order_id;
-    echo $order_id;
+    if (isset($_SESSION['orders_id'])) {
+        $order_id=$_SESSION['orders_id'];
     }
-
-}
-else{
-    $order_id=1;
-    echo $order_id;
+    else if (isset($_SESSION['order_id'])) {
+        $order_id=$_SESSION['order_id'];
     }
-}
-    
+     else{          
+        $maxOrderIdQuery = "SELECT MAX(order_id) AS max_order_id FROM `orders` WHERE email = '$email'";
+        $result = $conn->query($maxOrderIdQuery);
 
-    $sql = "SELECT user_id FROM users WHERE email = '$email'";
-    $result = $conn->query($sql);
+        if ($result && $result->num_rows > 0) {
+            $row = $result->fetch_assoc();
+            $order_id = 0;
+            if($order_id==0){
+                $order_id=1;
+            }
+            else{
+                echo 'order_id not 0';
+            }
+
+            // Use the $maxOrderId as needed
+            echo "Max Order ID: " . $order_id;
+        }
+    } 
     
-    
+    $selectUserQuery = "SELECT * FROM users WHERE email = '$email'";
+    // Execute the query
+    $result = $conn->query($selectUserQuery);
     if ($result->num_rows > 0) {
-        // Fetch the user ID from the result
         $row = $result->fetch_assoc();
+        $name = $row['name'];
+        $address = $row['address'];
+        $contact= $row['contact'];
         $user_id = $row['user_id'];
+        $_SESSION['user_id']=$user_id;
     }
   
 
-
-  
-
-
+    $sql = "SELECT * FROM products WHERE product_id = " . $product_id;
     $result = $conn->query($sql);
-
-    $sql = "SELECT product_name, price, image FROM products WHERE product_id = " . $product_id;
-    $result = $conn->query($sql);
-
     // Check if the query was successful
     if ($result && $result->num_rows > 0) {
         // Fetch the row from the result set
@@ -68,91 +65,66 @@ else{
         $product_name = $row['product_name'];
         $price = $row['price'];
         $image=$row['image'];
+        $quantity = $_POST['quantity_input'];
+        $_SESSION['quantity'] = $quantity;
+        $email=$_SESSION['email'];
+        $total_price=$quantity*$price;
     }
+    $tableName = "cart" . $order_id . $user_id;
+    $query = "SHOW TABLES LIKE '$tableName'";
+    $result = $conn->query($query);
+    if ($result && $result->num_rows > 0){
 
-    $quantity = $_POST['quantity_input'];
-    $_SESSION['quantity'] = $quantity;
-    $email=$_SESSION['email'];
-    $total_price=$quantity*$price;
-    $selectAddressQuery = "SELECT name,address,contact FROM users WHERE email = '$email'";
-    // Execute the query
-    $result = $conn->query($selectAddressQuery);
+    $checkQuery2 = "SELECT COUNT(*) AS count FROM cart" . $order_id . $user_id . " WHERE product_id = $product_id";
+    $checkResult2 = $conn->query($checkQuery2);
 
-    if ($result->num_rows > 0) {
-        // Fetch the row from the result
-        $row = $result->fetch_assoc();
+    if ($checkResult2 && $checkResult2->num_rows > 0) {
+        $row3 = $checkResult2->fetch_assoc();
+        $count3 = $row3['count'];
     }
-        // Get the address value from the fetched row
-        $name = $row['name'];
-        $address = $row['address'];
-        $contact= $row['contact'];
-        echo($name);
-        echo($address);
-
-        mysqli_select_db($conn, $dbname); 
-        
-
-// Check if the ID exists in the table
-echo $order_id;
-$checkQuery = "SELECT COUNT(*) AS count FROM cart" . $order_id . " WHERE id = 1";
-$checkResult = $conn->query($checkQuery);
-
-if ($checkResult && $checkResult->num_rows > 0) {
-    $row8 = $checkResult->fetch_assoc();
-    $count = $row8['count'];
-
-    if ($count > 0) {
-        // If the ID exists, fetch the highest ID value
-        $maxIdQuery = "SELECT MAX(id) AS max_id FROM cart$order_id";
-        $maxIdResult = $conn->query($maxIdQuery);
-
-        if ($maxIdResult && $maxIdResult->num_rows > 0) {
-            $row9 = $maxIdResult->fetch_assoc();
-            $maxId = $row9['max_id'];
-            $id2 = $maxId + 1;
-        }
-    }
-}
-
-// If the ID is still not set, set it to 1
-if (!isset($id2)) {
-    $id2 = 1;
-}
-
-
-$checkQuery2 = "SELECT COUNT(*) AS count FROM cart" . $order_id . " WHERE product_id = $product_id";
-$checkResult2 = $conn->query($checkQuery2);
-
-if ($checkResult2 && $checkResult2->num_rows > 0) {
-    $row3 = $checkResult2->fetch_assoc();
-    $count3 = $row3['count'];
-
     if ($count3 > 0) {
         // If the ID exists, perform the desired action
         $successMessage3 = "Product has been selected";
-          header("Location: product.php?message=" . urlencode($successMessage3));  
-            exit();
+        header("Location: product.php?message=" . urlencode($successMessage3));  
+        exit();
+    } 
     }
-    else{
+        // Create the cart$order_id table if it doesn't exist
+        $createTableQuery = "CREATE TABLE IF NOT EXISTS cart" . $order_id . "_" . $user_id . " (
+        id INT(11) PRIMARY KEY AUTO_INCREMENT,
+        user_id INT(11),
+        order_id INT(11),
+        product_id INT(11),
+        quantity INT(11),
+        name VARCHAR(255),
+        email VARCHAR(255),
+        address VARCHAR(255),
+        product_name VARCHAR(255),
+        price DECIMAL(10, 2),
+        image VARCHAR(255),
+        total_price DECIMAL(10, 2),
+        contact VARCHAR(255)
+    )";
+    $conn->query($createTableQuery);
+    
+    $insertcart = "INSERT INTO cart" . $order_id . "_" . $user_id . " (user_id,order_id,product_id,quantity,name,email,address,product_name,price,image,total_price,contact) VALUES ('$user_id','$order_id','$product_id','$quantity','$name','$email','$address','$product_name','$price','$image','$total_price','$contact')";
+    $insertorders = "INSERT INTO orders (user_id,order_id,product_id,quantity,name,email,address,product_name,price,image,total_price,contact,order_status) VALUES ('$user_id','$order_id','$product_id','$quantity','$name','$email','$address','$product_name','$price','$image','$total_price','$contact','cart')";
+    $adminOrders = "INSERT INTO adminorders (user_id,order_id,product_id,quantity,name,email,address,product_name,price,image,total_price,contact,order_status) VALUES ('$user_id','$order_id','$product_id','$quantity','$name','$email','$address','$product_name','$price','$image','$total_price','$contact','cart')";
+            
+    $_SESSION['order_id']=$order_id;
+    if ($conn->query($insertcart)&& $conn->query($insertorders)&& $conn->query($adminOrders)=== true) {
+        $successMessage = "Added to cart successfully!";
         echo $order_id;
-        $insertcart = "INSERT INTO cart$order_id (id,user_id,order_id,product_id,quantity,name,email,address,product_name,price,image,total_price,contact) VALUES ('$id2','$user_id','$order_id','$product_id','$quantity','$name','$email','$address','$product_name','$price','$image','$total_price','$contact')";
-        $insertorders = "INSERT INTO orders (user_id,order_id,product_id,quantity,name,email,address,product_name,price,image,total_price,contact,order_status) VALUES ('$user_id','$order_id','$product_id','$quantity','$name','$email','$address','$product_name','$price','$image','$total_price','$contact','cart')";
-        $adminOrders = "INSERT INTO adminorders (user_id,order_id,product_id,quantity,name,email,address,product_name,price,image,total_price,contact,order_status) VALUES ('$user_id','$order_id','$product_id','$quantity','$name','$email','$address','$product_name','$price','$image','$total_price','$contact','cart')";
-        
-        $_SESSION['order_id']=$order_id;
-        if ($conn->query($insertcart)&& $conn->query($insertorders)&& $conn->query($adminOrders)=== true) {
-            $successMessage = "Added to cart successfully!";
-            echo $order_id;
-           header("Location: product.php?message=" . urlencode($successMessage));  
-            exit();
-        }
-        else {
-            // Handle the error if the query fails
-            echo "Error inserting order: " . $conn->error;
-        }
-        }
-}
+        header("Location: product.php?message=" . urlencode($successMessage)); 
+    exit();
+    }
 
+    else {
+        // Handle the error if the query fails
+        echo "Error inserting order: " . $conn->error;
+    }
+    
+}
 
 
 
