@@ -11,8 +11,8 @@ if ($conn->connect_error) {
 }
 mysqli_select_db($conn, $dbname);
 $updateQuery = "";
-$updateQuery2 = "";
 $updateQuery3 = "";
+$updateResult="";
 
 if (isset($_POST['addCart'])) {
     session_start();
@@ -27,7 +27,7 @@ if (isset($_POST['addCart'])) {
         $order_id=$_SESSION['order_id'];
         echo $order_id;
     }
-     else{          
+    else{          
         $maxOrderIdQuery = "SELECT MAX(order_id) AS max_order_id FROM `orders` WHERE email = '$email'";
         $result = $conn->query($maxOrderIdQuery);
 
@@ -65,7 +65,6 @@ if (isset($_POST['addCart'])) {
     if ($result && $result->num_rows > 0) {
         // Fetch the row from the result set
         $row = $result->fetch_assoc();
-
         // Retrieve the name and price from the row
         $product_name = $row['product_name'];
         $price = $row['price'];
@@ -96,11 +95,11 @@ if (isset($_POST['addCart'])) {
         // Calculate the new quantity by adding the existing quantity to the selected quantity
         $newQuantity = $existingQuantity + $quantity;
         // Update the quantity in the existing cart record
-        $updateQuery = "UPDATE cart" . $order_id . "_" . $user_id . " SET quantity = $newQuantity WHERE product_id = $product_id";
-        $updateQuery2 = "UPDATE adminorders SET quantity = $newQuantity WHERE product_id = $product_id";
-        $updateQuery3 = "UPDATE orders SET quantity = $newQuantity WHERE product_id = $product_id";
-        $conn->query($updateQuery);
-        $conn->query($updateQuery2);
+        $newTotalPrice = $newQuantity * $price;
+        // Update the quantity and total price in the existing cart record
+        $updateQuery = "UPDATE cart" . $order_id . "_" . $user_id . " SET quantity = $newQuantity, total_price = $newTotalPrice WHERE product_id = $product_id";
+        $updateQuery3 = "UPDATE orders SET quantity = $newQuantity, total_price = $newTotalPrice WHERE product_id = $product_id";
+        $updateResult = $conn->query($updateQuery);
         $conn->query($updateQuery3);
     } 
     }
@@ -127,23 +126,27 @@ if (isset($_POST['addCart'])) {
     )";
     $conn->query($createTableQuery);
     }
-    $insertcart = "INSERT INTO cart" . $order_id . "_" . $user_id . " (user_id,order_id,product_id,quantity,name,email,address,product_name,price,image,total_price,contact) VALUES ('$user_id','$order_id','$product_id','$quantity','$name','$email','$address','$product_name','$price','$image','$total_price','$contact')";
-    $insertorders = "INSERT INTO orders (user_id,order_id,product_id,quantity,name,email,address,product_name,price,image,total_price,contact,order_status) VALUES ('$user_id','$order_id','$product_id','$quantity','$name','$email','$address','$product_name','$price','$image','$total_price','$contact','cart')";
-    $adminOrders = "INSERT INTO adminorders (user_id,order_id,product_id,quantity,name,email,address,product_name,price,image,total_price,contact,order_status) VALUES ('$user_id','$order_id','$product_id','$quantity','$name','$email','$address','$product_name','$price','$image','$total_price','$contact','cart')";
-        
-    $_SESSION['order_id']=$order_id;
-    if ( $conn->query($insertcart) && $conn->query($insertorders) && $conn->query($adminOrders)) {
+    if ($updateResult !== true){
+        $insertcart = "INSERT INTO cart" . $order_id . "_" . $user_id . " (user_id,order_id,product_id,quantity,name,email,address,product_name,price,image,total_price,contact) VALUES ('$user_id','$order_id','$product_id','$quantity','$name','$email','$address','$product_name','$price','$image','$total_price','$contact')";
+        $insertorders = "INSERT INTO orders (user_id,order_id,product_id,quantity,name,email,address,product_name,price,image,total_price,contact,order_status) VALUES ('$user_id','$order_id','$product_id','$quantity','$name','$email','$address','$product_name','$price','$image','$total_price','$contact','cart')";
+
+        $_SESSION['order_id']=$order_id;
+        if ( $conn->query($insertcart) && $conn->query($insertorders)) {
+            $successMessage = "Added to cart successfully!";
+            echo "hello world";
+            header("Location: product.php?message=" . urlencode($successMessage)); 
+        }
+        else{
+            echo'error update order';
+        }
+    }
+    else{
+        echo'hello world';
         $successMessage = "Added to cart successfully!";
-        echo "hello world";
         header("Location: product.php?message=" . urlencode($successMessage)); 
+    }
      exit();
-    }
-
-    else {
-        // Handle the error if the query fails
-        echo "Error inserting order: " . $conn->error;
-    }
-
+    
 }
   
     

@@ -123,6 +123,21 @@ body{
       width:100%;
       height:60px;
     }
+    
+    .message-container {
+      
+      background-color: rgba(0, 0, 0, 0.7);
+      position: fixed;
+      padding-left: 120px;
+      padding-right: 120px;
+      padding-top: 90px;
+      padding-bottom: 90px;
+      color: white;
+      font-size: 30px;
+      display: flex;
+    align-items: center;
+    justify-content: center;
+    }
     </style>
 </head>
 <div class=navContainer>
@@ -133,7 +148,7 @@ body{
     
 </div>
 <div id="container">
-   
+    <div id="messageContainer"></div>
     <div class="sell">
     <button id="sell" class="btn"><?php echo 'Sell Product' ?></button>
     </div>
@@ -181,6 +196,22 @@ sales.addEventListener("click", function() {
   // Perform the navigation action here
   window.location.href = "dailySales.php";
 });
+
+
+window.onload = function() {
+    var urlParams = new URLSearchParams(window.location.search);
+    var message = urlParams.get('message');
+    
+    if (message) {
+        var messageContainer = document.getElementById("messageContainer");
+        messageContainer.textContent = message;
+        messageContainer.style.display = "block";
+        messageContainer.classList.add("message-container");
+        setTimeout(function() {
+            messageContainer.style.display = "none";
+        }, 2000);
+    }
+}
 </script>
 
   

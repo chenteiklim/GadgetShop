@@ -13,7 +13,6 @@ if ($conn->connect_error) {
 }
 
 session_start();
-$email=$_SESSION['email'];
 mysqli_select_db($conn, $dbname);
 // Execute the query
 
@@ -59,7 +58,7 @@ if ($result->num_rows > 0) {
 
   
 #container {
-    width:1200px;
+    width:100%;
   display: flex;
   flex-direction: column;
   align-items:center;
@@ -70,6 +69,7 @@ if ($result->num_rows > 0) {
     background-color: black;
     color: white;
     cursor: pointer;
+    width: 200px;
     margin-left: 20px;
     padding-left: 30px;
     padding-right: 30px;
@@ -77,17 +77,7 @@ if ($result->num_rows > 0) {
     padding-bottom: 10px;
     font-size: 16px;
     }
-#btn {
-    background-color: black;
-    color: white;
-    cursor: pointer;
-    padding-left: 30px;
-    padding-right: 30px;
-    padding-top: 10px;
-    margin-top: 10px;
-    padding-bottom: 10px;
-    font-size: 16px;
-    }
+
     
     button:active {
       transform: scale(0.9);
@@ -96,27 +86,18 @@ if ($result->num_rows > 0) {
     
     body{
         background-color: bisque;
-        width: 1400px;
-        height: 1400px;
+        
     }
-
-
-    
-    #logOut{
-        margin-left: 200px;
-    }
-
 
 
 #navContainer{
-        width:1200px;
+        width:100%;
+        display:flex;
+        align-items:center;
+        justify-content:center;
         background-color: black;
     }
     
-    #logOut{
-        margin-left: 200px;
-    }
-
     form {
         border: 3px solid #f1f1f1;
         margin-top:30px;
@@ -162,9 +143,18 @@ input[type=text],[type=number]{
   border-radius: 5%;
 }
 
+.img{
+  width:50px;
+  height:50px;
+}
 #title{
   font-size:20px;
   margin-top:30px;
+  margin-left:200px;
+}
+#firstForm{
+  margin-left:200px;
+  margin-right:200px;
 }
     </style>
 </head>
@@ -172,10 +162,9 @@ input[type=text],[type=number]{
 <div id="navContainer"> 
 
     <!-- Your form fields here -->
-    <input type="hidden" name="data" value="<?php echo $_SESSION['data']; ?>">
-    <button class="button"><?php echo 'Notification' ?></button>
+    <img class='img' src="pitStop.png" alt="" srcset="">
+
     <button id="back" class="button"><?php echo 'Back' ?></button>
-    <button id="logOut" class="button"><?php echo 'Log Out' ?></button>
 
 </div>
 
@@ -183,7 +172,7 @@ input[type=text],[type=number]{
     Select which product you want to edit
 </div>
 
-<form action="editProduct.php" method="post">
+<form action="editProduct.php" id="firstForm" method="post">
   <div class="container">
     <div id="nameContainer">
       <?php
@@ -206,13 +195,6 @@ input[type=text],[type=number]{
 </form>
  
 <script>
-var logOutButton = document.getElementById("logOut");
-
-logOutButton.addEventListener("click", function() {
-  // Perform the navigation action here
-  window.location.href = "sellerLogin.html";
-});
-
 
 var back= document.getElementById("back");
 

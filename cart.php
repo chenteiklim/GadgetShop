@@ -197,7 +197,7 @@ foreach ($rows as $row) {
 ?>  
 <div class="content" id="row_<?php echo $product_id; ?>">
     <img class="item" src="<?php echo $image; ?>" alt="">
-    <div class="product_name"><?php echo $order_id; ?></div>
+    <div class="product_name"><?php echo $product_name; ?></div>
     <div id="price"><?php echo 'RM'.$price; ?></div>
     <div id="quantity">x<?php echo $quantity; ?></div>
     <div id="total_price"><?php echo 'RM'.$total_price; ?></div>

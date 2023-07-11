@@ -66,14 +66,11 @@ if (isset($_POST['submit'])) {
         // email exists and password exists, proceed with the login
        
         $sql = "UPDATE orders SET order_status = 'purchased', date = '$formattedDate' WHERE order_id = $order_id";
-        $sql9 = "UPDATE adminorders SET order_status = 'purchased' WHERE order_id = $order_id";
         // Execute query
         if ($conn->query($sql) === true) {
             echo "Row updated successfully.";
         } 
-        if ($conn->query($sql9) === true) {
-          echo "Row updated in adminorders table successfully.";
-        }
+        
 
         $product_ids_str = implode(',', $product_ids);
         $quantities = $_SESSION['quantities'];

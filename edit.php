@@ -13,7 +13,6 @@ if ($conn->connect_error) {
 }
 
 session_start();
-$email=$_SESSION['email'];
 $product_id=$_SESSION['product_id'];
 mysqli_select_db($conn, $dbname);
 
@@ -49,7 +48,8 @@ $product_name = $row2['product_name'];
     
         // Execute the SQL statement
         if ($conn->query($editProduct) === TRUE) {
-            echo "Product edited successfully.";
+          $successMessage = "edit Product successfully!";
+          header("Location: adminHomepage.php?message=" . urlencode($successMessage)); 
         } else {
             echo "Error: " . $mysqli->error;
         }
@@ -104,26 +104,14 @@ $product_name = $row2['product_name'];
     }
     
     body{
-        background-color: bisque;
-        width: 1400px;
-        height: 1400px;
+        background-color: bisque;   
     }
-
-
-    
-    #logOut{
-        margin-left: 200px;
-    }
-
-
 
 #navContainer{
-        width:1200px;
-        background-color: black;
-    }
-    
-    #logOut{
-        margin-left: 200px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      background-color: black;
     }
 
     form {
@@ -132,7 +120,7 @@ $product_name = $row2['product_name'];
     }
 
 input[type=text],[type=number]{
-  width: 100%;
+  width: 40%;
   padding: 12px 20px;
   margin: 8px 0;
   display: inline-block;
@@ -170,19 +158,32 @@ input[type=text],[type=number]{
 }
 
 #title{
-  font-size:20px;
+  margin-left:40%;
+  font-size:25px;
   margin-top:30px;
 }
+
+img{
+  width:50px;
+  height:50px;
+}
+
+form{
+  display:flex;
+ padding-left:200px;
+ padding-right:200px;
+  margin-left:400px;
+  margin-right:400px;
+}
+
     </style>
 </head>
 
 <div id="navContainer"> 
 
     <!-- Your form fields here -->
-    <input type="hidden" name="data" value="<?php echo $_SESSION['data']; ?>">
-    <button class="button"><?php echo 'Notification' ?></button>
+    <img class='img' src="pitStop.png" alt="" srcset="">
     <button id="back" class="button"><?php echo 'Back' ?></button>
-    <button id="logOut" class="button"><?php echo 'Log Out' ?></button>
 </div>
 
 <div id='title'>
@@ -191,37 +192,35 @@ input[type=text],[type=number]{
 <form action="edit.php" method="post" enctype="multipart/form-data">
   <div class="container">
     <div id="nameContainer">
-      <label for="productName"><b>Product Name</b></label>
-      <input type="text" placeholder="Enter Product Name" name="productName" required>
+      <label for="productName"><b>New Product Name</b></label>
+      
+      <input type="text" placeholder="Enter Product Name" name="productName">
     </div>
-   
-    <label for="productImage"><b>Product Image address</b></label>
-    <input type="file" name="productImage" required>
+    <br>
+    <label for="productImage"><b>New Product Image address</b></label>
+    <input type="file" name="productImage">
     <br>
     <br>
-    <label for="price"><b>Price wanted to sell</b></label>
-    <input type="number" placeholder="Enter price" name="price" required>
+    <label for="price"><b>New Price</b></label>
+    <input type="number" placeholder="Enter price" name="price">
+    <div>
 
-    <label for="stock"><b>Stock</b></label>
-    <input type="text" placeholder="Enter how many stock do you have (minimum 10)" name="stock" required>
+    <label for="stock"><b>Edited Stock</b></label>
+    <input type="text" placeholder="Enter how many stock " name="stock">
+    </div>
+    <br>
 
     <input id="createProduct" type="submit" name="submits" value="Edit Product">
     <div>
 </form>
  
 <script>
-var logOutButton = document.getElementById("logOut");
-
-logOutButton.addEventListener("click", function() {
-  // Perform the navigation action here
-  window.location.href = "sellerLogin.html";
-});
 
 var back= document.getElementById("back");
 
 back.addEventListener("click", function() {
   // Perform the navigation action here
-  window.location.href = "adminHomepage.php";
+  window.location.href = "editProduct.php";
 });
 </script>
 
