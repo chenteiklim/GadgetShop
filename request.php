@@ -113,7 +113,7 @@ body{
     <img class="image" src="<?php echo $image;?>" alt="" srcset="">
     <div class="text2"><?php echo $product_name; ?></div>
     <div class="text2"><?php echo "RM" . $price; ?></div>
-    <form action="" method="post">
+    <form action="request.php" method="post">
         <button id="request" class="button" type="submit" name="request">request refund</button>
     </form>
 </div>

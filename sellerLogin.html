@@ -7,10 +7,17 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <style>
-    body {font-family: Arial, Helvetica, sans-serif;}
-form {border: 3px solid #f1f1f1;}
+ body {
+      background-color: bisque;
+      margin-left: 20px;
+    }
 
-input[type=email], input[type=password] {
+.title{
+  display: flex;
+  align-items: center;
+}
+
+input[type=text], input[type=password] ,input[type=email] {
   width: 100%;
   padding: 12px 20px;
   margin: 8px 0;
@@ -19,47 +26,12 @@ input[type=email], input[type=password] {
   box-sizing: border-box;
 }
 
-#login{
-  background-color: blueviolet;
-  color: white;
-  padding: 14px 20px;
-  border: none;
-  cursor: pointer;
-  width: 120px;
-}
-
-#register{
-  background-color: blueviolet;
-  color: white;
-  padding: 14px 20px;
-  border: none;
-  cursor: pointer;
-  width: 120px;
-}
-
-#reset{
-  background-color: blue;
-  color: white;
-  padding: 10px 16px;
-  margin-top: 10px;
-  border: none;
-  cursor: pointer;
-  width: 160px;
-  border-radius: 5%;
-}
-
-#login:hover, #reset:hover {
-  opacity: 0.8;
-}
-
-
-.imgcontainer {
-  text-align: center;
-  margin: 24px 0 12px 0;
-  color: white;
-}
 
 .container {
+  background-color: white;
+  width:420px;
+  margin-top:20px;
+  margin-left:550px;
   padding: 16px;
 }
 
@@ -68,12 +40,69 @@ span.psw {
   padding-top: 16px;
 }
 
-#registerNow{
-    margin-top:40px;
+.img{
+  margin-left:400px;
+  width:50px;
+  height:50px;
   }
 
+  #navContainer{
+    color:white;
+      display:flex;
+     align-items:center;
+    background-color: black;
+    }
+
+    .button {
+    background-color: black;
+    color: white;
+    cursor: pointer;
+    padding-left: 30px;
+    padding-right: 30px;
+    padding-top: 10px;
+    margin-top: 10px;
+    padding-bottom: 10px;
+    font-size: 16px;
+    }
+
+    #Register{
+      margin-left: 200px;
+    }
+    
+    .button:active {
+      transform: scale(0.9);
+      background: radial-gradient( circle farthest-corner at 10% 20%,  rgba(255,94,247,1) 17.8%, rgba(2,245,255,1) 100.2% );
+    }
+
+      .title{
+        margin-left: 600px;
+        margin-top: 30px;
+        font-size: 20px;
+      }
+    
+  .message-container {
+      
+      background-color: rgba(0, 0, 0, 0.7);
+      position: fixed;
+      margin-left: 500px;
+      padding-left: 120px;
+      padding-right: 120px;
+      padding-top: 90px;
+      padding-bottom: 90px;
+      color: white;
+      font-size: 30px;
+      display: flex;
+    align-items: center;
+    justify-content: center;
+    }
+
+    #login{
+  margin-top: 20px; 
+  }
+
+
   #user{
-  margin-left: 600px;
+  margin-left: 100px;
   background-color: blueviolet;
   color: white;
   padding: 14px 20px;
@@ -82,10 +111,6 @@ span.psw {
   width: 120px;
 }
 
-.title{
-  display: flex;
-  align-items: center;
-}
 
 
 /* Change styles for span and cancel button on extra small screens */
@@ -113,6 +138,10 @@ span.psw {
     </div>
 
 <form action="sellerLogin.php" method="post">
+  
+<div id="navContainer"> 
+  <img class='img' src="pitStop.png" alt="" srcset="">
+</div>
   <div class="container">
     <div id="nameContainer">
       <label for="email"><b>Email</b></label>
@@ -121,9 +150,9 @@ span.psw {
    
     <label for="password"><b>Password</b></label>
     <input type="password" placeholder="Enter Password" name="password" required>
-    <input id="login" type="submit" name="submit" value="login">
+    <input id="login" class='button' type="submit" name="submit" value="login">
     <div>
-      <button id="reset" type="submit" name="forgetPassword" formnovalidate>Forget Password</butto>
+      <button id="reset" class="button" type="submit" name="forgetPassword" formnovalidate>Forget Password</butto>
     </div>
   </div>
 </form>

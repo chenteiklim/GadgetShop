@@ -34,9 +34,16 @@ if ($result->num_rows > 0) {
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"></link>
     <style>
 
-  
+body{
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+}
 #container {
-    width:1200px;
+  margin-top:50px;
+  background-color:white;
+    width:400px;
+    height:400px;
   display: flex;
   flex-direction: column;
   align-items:center;
@@ -44,24 +51,14 @@ if ($result->num_rows > 0) {
 
 
 .button {
-    background-color: black;
+    background-color: darkblue;
     color: white;
     cursor: pointer;
+    width:200px;
     margin-left: 20px;
     padding-left: 30px;
     padding-right: 30px;
     padding-top: 10px;
-    padding-bottom: 10px;
-    font-size: 16px;
-    }
-#btn {
-    background-color: black;
-    color: white;
-    cursor: pointer;
-    padding-left: 30px;
-    padding-right: 30px;
-    padding-top: 10px;
-    margin-top: 10px;
     padding-bottom: 10px;
     font-size: 16px;
     }
@@ -70,29 +67,33 @@ if ($result->num_rows > 0) {
       transform: scale(0.9);
       background: radial-gradient( circle farthest-corner at 10% 20%,  rgba(255,94,247,1) 17.8%, rgba(2,245,255,1) 100.2% );
     }
+  
     
+.btn {
+    background-color: black;
+    color: white;
+    cursor: pointer;
+    width:200px;
+    margin-left: 20px;
+    padding-left: 30px;
+    padding-right: 30px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    font-size: 16px;
+    }
+    
+    .btn:active {
+      transform: scale(0.9);
+      background: radial-gradient( circle farthest-corner at 10% 20%,  rgba(255,94,247,1) 17.8%, rgba(2,245,255,1) 100.2% );
+    }
+    
+
     body{
         background-color: bisque;
-        width: 1400px;
+        width: 100%;
         height: 1400px;
     }
-
-
-    
-    #logOut{
-        margin-left: 200px;
-    }
-
-
-
-#navContainer{
-        width:1200px;
-        background-color: black;
-    }
-    
-    #logOut{
-        margin-left: 200px;
-    }
+ 
 
     .sell{
         margin-top:80px;
@@ -108,30 +109,42 @@ if ($result->num_rows > 0) {
     #sales{
         margin-top:20px;
     }
+
+    .img{
+      width:50px;
+      height:50px;
+    }
+
+    .navContainer{
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      background-color:black;
+      width:100%;
+      height:60px;
+    }
     </style>
 </head>
+<div class=navContainer>
+  <img class='img' src="pitStop.png" alt="" srcset="">
 
-<div id="navContainer"> 
-
-    <!-- Your form fields here -->
-    <input type="hidden" name="data" value="<?php echo $_SESSION['data']; ?>">
     <button class="button"><?php echo $name ?></button>
     <button id="logOut" class="button"><?php echo 'Log Out' ?></button>
-
+    
 </div>
 <div id="container">
-  
+   
     <div class="sell">
-    <button id="sell" class="button"><?php echo 'Sell Product' ?></button>
+    <button id="sell" class="btn"><?php echo 'Sell Product' ?></button>
     </div>
     <div class="edit">
-    <button id="edit" class="button"><?php echo 'Edit Product' ?></button>
+    <button id="edit" class="btn"><?php echo 'Edit Product' ?></button>
     </div>
     <div class="admin">
-    <button id="admin" class="button"><?php echo 'Sales' ?></button>
+    <button id="admin" class="btn"><?php echo 'Sales' ?></button>
     </div>
     <div class="sales">
-    <button id="sales" class="button"><?php echo 'Daily sales' ?></button>
+    <button id="sales" class="btn"><?php echo 'Daily sales' ?></button>
     </div>
 </div>
  

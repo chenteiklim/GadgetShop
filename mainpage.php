@@ -11,7 +11,6 @@ $conn = new mysqli($servername, $Username, $Password);
 if ($conn->connect_error) {
   die("Connection failed: " . $conn->connect_error);
 }
-
 session_start();
 $email=$_SESSION['email'];
 if (isset($_SESSION['orders_id'])) {
@@ -299,7 +298,9 @@ if ($result->num_rows > 0) {
     if (isset($_SESSION['product_id'])) {
       // Product ID is saved in the session
       $product_id = $_SESSION['product_id'];
-      echo '<script>window.location.href = "product.php";</script>';
+      echo $product_id;
+
+       echo '<script>window.location.href = "product.php";</script>';
      
       
   } 

@@ -54,18 +54,25 @@ $insertProduct = "INSERT INTO products (product_id, product_name, image, price, 
     <title>Product</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"></link>
     <style>
+form{
+  height:320px;
 
+}
   
-#container {
-    width:1200px;
+.container {
+  margin-top:20px;
+  width: 550px;
+  height:500px;
+  background-color:white;
   display: flex;
   flex-direction: column;
-  align-items:center;
+  gap:5px;
 }
 
 
 .button {
-    background-color: black;
+    background-color: darkblue;
+    width:200px;
     color: white;
     cursor: pointer;
     margin-left: 20px;
@@ -75,59 +82,43 @@ $insertProduct = "INSERT INTO products (product_id, product_name, image, price, 
     padding-bottom: 10px;
     font-size: 16px;
     }
-#btn {
-    background-color: black;
-    color: white;
-    cursor: pointer;
-    padding-left: 30px;
-    padding-right: 30px;
-    padding-top: 10px;
-    margin-top: 10px;
-    padding-bottom: 10px;
-    font-size: 16px;
-    }
-    
-    button:active {
+    .button:active {
       transform: scale(0.9);
       background: radial-gradient( circle farthest-corner at 10% 20%,  rgba(255,94,247,1) 17.8%, rgba(2,245,255,1) 100.2% );
     }
     
     body{
+        display:flex;
+        flex-direction:column;
+        align-items:center;
         background-color: bisque;
-        width: 1400px;
+        width: 100%;
         height: 1400px;
-    }
-
-
-    
-    #logOut{
-        margin-left: 200px;
     }
 
 
 
 #navContainer{
-        width:1200px;
+        display:flex;
+        align-items:center;
+        justify-content:center;
+        width:100%;
         background-color: black;
     }
-    
-    #logOut{
-        margin-left: 200px;
-    }
-
     form {
       margin-top:30px;
       border: 3px solid #f1f1f1;
     }
 
-input[type=text],[type=number]{
-  width: 100%;
+input[type=file],input[type=text],input[type=number]{
   padding: 12px 20px;
-  margin: 8px 0;
-  display: inline-block;
+  width:300px;
+  margin: 8px 5px;
   border: 1px solid #ccc;
   box-sizing: border-box;
+  
 }
+
 
 #createProduct{
   background-color: blueviolet;
@@ -136,6 +127,8 @@ input[type=text],[type=number]{
   border: none;
   cursor: pointer;
   width: 120px;
+  margin-top:10px;
+  margin-left:300px;
 }
 
 #register{
@@ -162,42 +155,45 @@ input[type=text],[type=number]{
   font-size:20px;
   margin-top:30px;
 }
+
+.content{
+  margin-left:40px;
+  width: 480px;
+}
     </style>
 </head>
 
 <div id="navContainer"> 
-
-    <!-- Your form fields here -->
-    <input type="hidden" name="data" value="<?php echo $_SESSION['data']; ?>">
-    <button class="button"><?php echo 'Notification' ?></button>
     <button id="back" class="button"><?php echo 'Back' ?></button>
     <button id="logOut" class="button"><?php echo 'Log Out' ?></button>
 </div>
-
-<div id='title'>
-  Create Product
-</div>
-<form action="createProduct.php" method="post" enctype="multipart/form-data">
-  <div class="container">
-    <div id="nameContainer">
-      <label for="productName"><b>Product Name</b></label>
-      <input type="text" placeholder="Enter Product Name" name="productName" required>
+<div class="container">
+  <div class="content">
+  <div id='title'>
+    Create Product
+  </div>
+  <form action="createProduct.php" method="post" enctype="multipart/form-data">
+      <div id="nameContainer">
+        <label for="productName"><b>Product Name</b></label>
+        <input type="text" placeholder="Enter Product Name" name="productName" required>
+      </div>
+    <div class="imageContainer">
+      <label for="productImage"><b>Product Image address</b></label>
+      <input type="file" name="productImage" required>
     </div>
-   
-    <label for="productImage"><b>Product Image address</b></label>
-    <input type="file" name="productImage" required>
-    <br>
-    <br>
-    <label for="price"><b>Price wanted to sell</b></label>
-    <input type="number" placeholder="Enter price" name="price" required>
-
-    <label for="stock"><b>Stock</b></label>
-    <input type="text" placeholder="Enter how many stock do you have (minimum 10)" name="stock" required>
-
+    <div class="priceContainer">   
+      <label for="price"><b>Price wanted to sell</b></label>
+      <input type="number" placeholder="Enter price" name="price" required>
+    </div>
+    <div class='stockContainer'>
+      <label for="stock"><b>Stock</b></label>
+      <input type="text" placeholder="Enter how many stock do you have (minimum 10)" name="stock" required>
+    </div>
     <input id="createProduct" type="submit" name="submit" value="Create Product">
-    <div>
-</form>
- 
+      
+  </form>
+  </div>
+</div>
 <script>
 var logOutButton = document.getElementById("logOut");
 

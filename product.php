@@ -61,7 +61,6 @@ if ($result->num_rows > 0) {
   <div id="navContainer"> 
     <button id="Cart" class="button">Shopping Cart</button>
     <button class="button"><?php echo $name ?></button>
-    <button id="logOut" class="button">Log-out</button>
     <button id="back" class="button">Back</button>
 
   </div>
@@ -239,12 +238,6 @@ decrementButton.addEventListener('click', function(event) {
 })
 
 
-var logOutButton = document.getElementById("logOut");
-
-logOutButton.addEventListener("click", function() {
-  // Perform the navigation action here
-  window.location.href = "login.html";
-});
 
   document.getElementById("Cart").addEventListener("click", function() {
     window.location.href = "cart.php";
