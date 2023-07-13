@@ -36,7 +36,7 @@ if ($result->num_rows > 0) {
     $price = $row['price'];
 
     $image= $row['image'];
-
+    $stock=$row['stock'];
     $status = $row['status'];
 }
 
@@ -175,6 +175,11 @@ if ($result->num_rows > 0) {
       display: flex;
     align-items: center;
     justify-content: center;
+
+    }
+    .stock{
+      margin-top:10px;
+      margin-left:50px;
     }
 
 </style>
@@ -184,10 +189,10 @@ if ($result->num_rows > 0) {
         </div>
         <div>
             <div class="names"><?php echo $product_name; ?> </div>
+
             
-
-
             <div id="status" class="status"><?php echo $status.'sold' ; ?></div>
+            <div class="stock"><?php echo $stock . 'stock available'; ?></div>
         
         <div id="price-<?php echo 0; ?>" class="prices"><?php echo'RM'.$price; ?></div>
         <form action="order.php?product_id=1" method="post">

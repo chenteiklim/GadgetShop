@@ -227,8 +227,7 @@ session_start();
           <div class="unit">RM</div>
           <div>' . $price . '</div>
         </div>
-    
-      <div class="status">' . $status . ' sold</div>
+        <div class="stock">' . ($stock > 0 ? $stock . ' stock available' : 'Out of stock') . '</div>      <div class="status">' . $status . ' sold</div>
       <form action="" method="post">
       <button class="button" type="submit" name="view" value="' . $button_id . '">View</button>
       </form>

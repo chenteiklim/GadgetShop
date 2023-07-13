@@ -143,8 +143,8 @@ if (isset($_POST['addCart'])) {
     else{
         echo'hello world';
         $successMessage = "Added to cart successfully!";
-        header("Location: product.php?message=" . urlencode($successMessage)); 
-    }
+/*         header("Location: product.php?message=" . urlencode($successMessage)); 
+ */    }
      exit();
     
 }

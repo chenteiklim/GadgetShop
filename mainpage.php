@@ -260,7 +260,6 @@ if ($result->num_rows > 0) {
           $status=$row['status'];
           $soldStatus = $status . " sold";
           if ($status == 100) {
-            $soldStatus='out of stock';
             $disableButton = 'disabled'; // Add this line
           }
           $button_id = $product_id;
@@ -276,7 +275,7 @@ if ($result->num_rows > 0) {
                 <div class="unit">RM</div>
                 <div>' . $price . '</div>
               </div>
-          
+              <div class="stock">' . ($stock > 0 ? $stock . ' stock available' : 'Out of stock') . '</div>    
             <div class="status">' . $soldStatus . '</div>
             <form action="" method="post">
             <button class="button" type="submit" name="view" value="' . $button_id . '" ' . $disableButton . '>View</button>            </form>

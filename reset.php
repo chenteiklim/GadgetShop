@@ -31,7 +31,7 @@ if (isset($_POST['passwordConfirmation'])) {
             $updateSql = "UPDATE users SET password = '$newPassword' WHERE email = '$email'";
             
             if ($conn->query($updateSql) === TRUE) {
-                header("Location: homepage.html?success=7");
+                header("Location: homepage.php?success=7");
                 exit();
             } else {
                 echo "Error updating password: " . $conn->error;

@@ -34,6 +34,8 @@ if ($row['max_id'] !== null) {
     
     $order_id = $row['max_id'];
     $_SESSION['order_id'] = $order_id;
+    echo $order_id;
+
 
 
     // Query to retrieve all rows in ascending order
