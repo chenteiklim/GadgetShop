@@ -57,13 +57,13 @@ if (isset($_POST['emailConfirmation'])) {
             $mail->isSMTP();
             $mail->Host = 'smtp.office365.com';
             $mail->SMTPAuth = true;
-            $mail->Username = 'chenteik_99@hotmail.com';
+            $mail->Username = 'abc@hotmail.com';
             $mail->Password = '*********';
             $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
             $mail->Port = 587;
 
             // Set the sender, recipient, subject, and message
-            $mail->setFrom('chenteik_99@hotmail.com', 'Pit Stop for Computer');
+            $mail->setFrom('abc', 'Pit Stop for Computer');
             $mail->addAddress($to);
             $mail->Subject = $subject;
             $mail->isHTML(true);
