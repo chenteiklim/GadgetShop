@@ -6,15 +6,6 @@ $username = "root";
 $password = "";
 $dbname = "gadgetShop";
 
-require 'vendor/phpmailer/phpmailer/src/PHPMailer.php';
-require 'vendor/phpmailer/phpmailer/src/SMTP.php';
-require 'vendor/phpmailer/phpmailer/src/Exception.php';
-require 'vendor/autoload.php';
-
-use PHPMailer\PHPMailer\PHPMailer;
-use PHPMailer\PHPMailer\SMTP;
-use PHPMailer\PHPMailer\Exception;
-
 // Create a database connection
 $conn = new mysqli($servername, $username, $password, $dbname);
 
@@ -46,37 +37,4 @@ if (isset($_POST['emailConfirmation'])) {
                     (Clicking not working? Try pasting it into your browser!)
                 </body>
             </html>';
-                   
-        // Initialize PHPMailer
-        $mail = new PHPMailer(true);
-        try {
-            // Enable SMTP debugging (if needed)
-            $mail->SMTPDebug = SMTP::DEBUG_OFF;
-
-            // Set the SMTP server and credentials
-            $mail->isSMTP();
-            $mail->Host = 'smtp.office365.com';
-            $mail->SMTPAuth = true;
-            $mail->Username = 'abc@hotmail.com';
-            $mail->Password = '*********';
-            $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
-            $mail->Port = 587;
-
-            // Set the sender, recipient, subject, and message
-            $mail->setFrom('abc', 'Pit Stop for Computer');
-            $mail->addAddress($to);
-            $mail->Subject = $subject;
-            $mail->isHTML(true);
-            $mail->Body = $message;
-
-            // Send the email
-            $mail->send();
-            header("Location: checkEmail.html?success=8");
-            exit();
-        } catch (Exception $e) {
-            echo "Error sending email: " . $mail->ErrorInfo;
-        }
-    } else {
-        echo "Error saving the password reset token in the database.";
-    }
-}
+      
